@@ -1,14 +1,9 @@
-import React from "react";
 import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const PrivateRoute = ({ children }) => {
-	const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-
-	if (!isLoggedIn) {
-		return <Navigate to="/login" />;
-	}
-
-	return children;
+	const { admin } = useAuth();
+	return admin ? children : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;
