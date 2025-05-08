@@ -1,7 +1,24 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const [admin, setAdmin] = useState({});
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const adminData = JSON.parse(localStorage.getItem("adminData"));
+    if (adminData) {
+      setAdmin(adminData);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("adminData");
+    setAdmin(null);
+    navigate("/");
+  };
+
   return (
     <>
       <div className="navbar bg-base-100">
@@ -21,20 +38,49 @@ const Navbar = () => {
               </NavLink>
             </li>
             <li>
+              <NavLink
+                to={"/dashboard"}
+                className="hover:bg-green-500 hover:text-white"
+              >
+                dashboard
+              </NavLink>
+            </li>
+            <li>
               <details>
-                <summary>Parent</summary>
+                <summary>uang kas</summary>
                 <ul className="bg-base-100 rounded-t-none p-2">
                   <li>
-                    <a>Link 1</a>
+                    <a>Bayar SPP</a>
                   </li>
                   <li>
-                    <a>Link 2</a>
+                    <a>UANG GEDUNG</a>
                   </li>
                 </ul>
               </details>
             </li>
+            {admin ? (
+              <>
+                <div className="flex items-center gap-2 ml-4">
+                  <span className="text-sm font-semibold">
+                    {admin.username || "Admin"}
+                  </span>
+                  <button
+                    onClick={handleLogout}
+                    className="btn btn-error btn-sm"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                {" "}
+                <NavLink to={"/login"} className="btn btn-primary rounded-lg">
+                  Login
+                </NavLink>
+              </>
+            )}
           </ul>
-          <button className="btn btn-primary rounded-lg">Login</button>
         </div>
       </div>
     </>
