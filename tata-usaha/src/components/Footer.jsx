@@ -9,7 +9,7 @@ const Footer = () => {
 	});
 
 	return (
-		<div className="footer footer-center p-4 bg-base-300 text-base-content">
+		<div className="footer footer-center p-10 bg-base-300 text-base-content">
 			<h1>{formattedDate}</h1>
 		</div>
 	);

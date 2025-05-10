@@ -1,6 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
+import { useSiswa } from "../context/SiswaContext";
 
-const FormPendaftaran = ({ handleSubmit, handleChange, formData }) => {
+const FormPendaftaran = () => {
+	const { tambahSiswa } = useSiswa();
+	const [formData, setFormData] = useState({
+		nama: "",
+		kelas: "",
+		nisn: "",
+		balance: 0,
+	});
+
+	const handleChange = (e) => {
+		setFormData({ ...formData, [e.target.name]: e.target.value });
+	};
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		try {
+			await tambahSiswa(formData);
+			setFormData({ nama: "", kelas: "", nisn: "", balance: 0 });
+		} catch (err) {
+			alert(`gagal menambahkan siswa : ${err}`);
+		}
+	};
+
 	return (
 		<div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
 			<h2 className="text-xl font-semibold mb-4">Pendaftaran Murid Baru</h2>
@@ -44,6 +67,21 @@ const FormPendaftaran = ({ handleSubmit, handleChange, formData }) => {
 						id="nisn"
 						name="nisn"
 						value={formData.nisn}
+						onChange={handleChange}
+						className="w-full px-3 py-2 border rounded-md"
+						required
+					/>
+				</div>
+
+				<div className="mb-4">
+					<label className="block text-gray-700 mb-2" htmlFor="nisn">
+						uang daftar
+					</label>
+					<input
+						type="number"
+						id="balance"
+						name="balance"
+						value={formData.balance}
 						onChange={handleChange}
 						className="w-full px-3 py-2 border rounded-md"
 						required

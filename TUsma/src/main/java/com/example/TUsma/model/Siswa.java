@@ -10,6 +10,7 @@ public class Siswa {
     private String nama;
     private String kelas;
     private String nisn;
+    private int balance;
 
 
     public void setId(Long id) {
@@ -17,7 +18,7 @@ public class Siswa {
     }
 
     public Long getId(){
-        return id = id;
+        return id;
     }
 
     public void setNama(String nama) {
@@ -25,7 +26,7 @@ public class Siswa {
     }
 
     public String getNama(){
-        return nama = nama;
+        return nama;
     }
 
     public void setKelas(String kelas) {
@@ -33,7 +34,7 @@ public class Siswa {
     }
 
     public String getKelas(){
-        return kelas = kelas;
+        return  kelas;
     }
 
     public void setNisn(String nisn) {
@@ -41,7 +42,15 @@ public class Siswa {
     }
 
     public String getNisn(){
-        return nisn = nisn;
+        return  nisn;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
+
+    public int getBalance(){
+        return  balance;
     }
 
 }
