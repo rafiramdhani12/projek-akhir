@@ -1,5 +1,8 @@
 package com.example.TUsma.model;
 
+import java.util.List;
+import java.util.Map;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -12,12 +15,15 @@ public class Siswa {
     private String nisn;
     private int balance;
 
+    @OneToMany(mappedBy = "siswa" , cascade = CascadeType.ALL)
+    private List<Pembayaran> riwayatPembayaran;
 
+  
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getId(){
+    public Long getId(){    
         return id;
     }
 

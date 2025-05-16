@@ -1,12 +1,16 @@
 package com.example.TUsma.controller;
 
+
 import com.example.TUsma.model.Siswa;
 import com.example.TUsma.repository.SiswaRepository;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -40,22 +44,37 @@ public class SiswaController {
         return ResponseEntity.ok(savedSiswa);
     }
     
-    @PutMapping("/{id}")
-    public ResponseEntity<Siswa> updateSiswa(@PathVariable Long id, @RequestBody Siswa siswaDetails) {
+    // @PutMapping("/{id}")
+    // public ResponseEntity<Siswa> updateSiswa(@PathVariable Long id, @RequestBody Siswa siswaDetails) {
+    //     Optional<Siswa> siswaOptional = siswaRepository.findById(id);
+        
+    //     if(siswaOptional.isPresent()) {
+    //         Siswa siswa = siswaOptional.get();
+    //         // Update siswa fields here
+    //         // Example: siswa.setNama(siswaDetails.getNama());
+    //         // Add all required field updates
+            
+    //         Siswa updatedSiswa = siswaRepository.save(siswa);
+    //         return ResponseEntity.ok(updatedSiswa);
+    //     } else {
+    //         return ResponseEntity.notFound().build();
+    //     }
+    // }
+
+    @PatchMapping("pelunasan/{id}")
+    public ResponseEntity<Siswa> pelunasanSiswa(@PathVariable Long id, @RequestBody Siswa siswaDetails) {
         Optional<Siswa> siswaOptional = siswaRepository.findById(id);
         
         if(siswaOptional.isPresent()) {
             Siswa siswa = siswaOptional.get();
-            // Update siswa fields here
-            // Example: siswa.setNama(siswaDetails.getNama());
-            // Add all required field updates
-            
+            siswa.setBalance(siswaDetails.getBalance());
             Siswa updatedSiswa = siswaRepository.save(siswa);
             return ResponseEntity.ok(updatedSiswa);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
+
     
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSiswa(@PathVariable Long id) {

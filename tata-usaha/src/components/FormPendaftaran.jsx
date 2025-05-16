@@ -3,6 +3,7 @@ import { useSiswa } from "../context/SiswaContext";
 
 const FormPendaftaran = () => {
 	const { tambahSiswa } = useSiswa();
+	const [error, setError] = useState("");
 	const [formData, setFormData] = useState({
 		nama: "",
 		kelas: "",
@@ -11,11 +12,30 @@ const FormPendaftaran = () => {
 	});
 
 	const handleChange = (e) => {
-		setFormData({ ...formData, [e.target.name]: e.target.value });
+		const { name, value } = e.target;
+
+		if (name === "balance" && Number(value) > 2500000) {
+			setFormData({ ...formData, balance: 2500000 }); // set balance max 2500000
+			setError("balance tidak boleh lebih dari 2.500.000");
+			return;
+		}
+
+		setFormData({
+			...formData,
+			[name]: value,
+		});
+
+		setError("");
 	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+
+		if (formData.balance > 2500000) {
+			setError("balance tidak boleh lebih dari 2.500.000");
+			return;
+		}
+
 		try {
 			await tambahSiswa(formData);
 			setFormData({ nama: "", kelas: "", nisn: "", balance: 0 });
@@ -25,7 +45,7 @@ const FormPendaftaran = () => {
 	};
 
 	return (
-		<div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+		<div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md mt-5 mb-5">
 			<h2 className="text-xl font-semibold mb-4">Pendaftaran Murid Baru</h2>
 			<form onSubmit={handleSubmit}>
 				<div className="mb-4">
@@ -91,6 +111,7 @@ const FormPendaftaran = () => {
 				<button type="submit" className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
 					Daftar
 				</button>
+				{error && <p className="text-red-500 mt-2">{error}</p>}
 			</form>
 		</div>
 	);

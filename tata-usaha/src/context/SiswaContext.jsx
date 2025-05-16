@@ -1,13 +1,16 @@
 import axios from "axios";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 
 const SiswaContext = createContext();
 
 export const SiswaProvider = ({ children }) => {
+	const { token } = useAuth();
 	const [siswa, setSiswa] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
+
 	const navigate = useNavigate();
 
 	const fetcDataSiswa = useCallback(async () => {
@@ -15,7 +18,7 @@ export const SiswaProvider = ({ children }) => {
 			setLoading(true);
 			const res = await axios.get("http://localhost:8080/api/siswa", {
 				headers: {
-					Authorization: `Bearer ${localStorage.getItem("token")}`,
+					Authorization: `Bearer ${token}`,
 				},
 			});
 			setSiswa(res.data);
@@ -25,16 +28,36 @@ export const SiswaProvider = ({ children }) => {
 		} finally {
 			setLoading(false);
 		}
-	}, []);
+	}, [token]);
 
 	const tambahSiswa = async (formData) => {
 		try {
-			const res = await axios.post("http://localhost:8080/api/siswa", formData);
+			const res = await axios.post("http://localhost:8080/api/siswa", formData, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
 			setSiswa((prev) => [...prev, res.data]); // refresh data setelah tambah
-			navigate("/dashboard");
+			navigate("/dashboard/admin");
 		} catch (err) {
 			console.error(`gagal menambahkan siswa : ${err}`);
 			throw err;
+		}
+	};
+
+	const pelunasan = async (formData) => {
+		try {
+			const res = await axios.patch(`http://localhost:8080/api/siswa/pelunasan/${formData.id}`, formData, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			// update data siswa yg ada di state, bukan menambah
+			setSiswa((prev) => prev.map((siswa) => (siswa.id === formData.id ? res.data : siswa)));
+			navigate("/dashboard");
+		} catch (error) {
+			console.error(`gagal update siswa : ${error}`);
+			throw error;
 		}
 	};
 
@@ -44,7 +67,7 @@ export const SiswaProvider = ({ children }) => {
 	}, [fetcDataSiswa]);
 
 	return (
-		<SiswaContext.Provider value={{ siswa, tambahSiswa, loading, error, fetcDataSiswa }}>
+		<SiswaContext.Provider value={{ siswa, tambahSiswa, loading, error, fetcDataSiswa, pelunasan }}>
 			{children}
 		</SiswaContext.Provider>
 	);

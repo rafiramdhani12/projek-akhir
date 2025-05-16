@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext"; // ⬅️ import context
+import { useAuth } from "../context/AuthContext"; //  import context
 
 const FormLogin = () => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 	const navigate = useNavigate();
-	const { login } = useAuth(); // ⬅️ panggil login dari context
+	const { login } = useAuth(); //  panggil login dari context
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
@@ -20,11 +20,13 @@ const FormLogin = () => {
 				password,
 			});
 
-			if (res.data.status === "success") {
-				login(res.data.admin); // ⬅️ set data ke context + localStorage
-				navigate("/dashboard");
+			const data = res.data;
+
+			if (data.status === "success") {
+				login(data); // simpan ke context
+				navigate("/dashboard/admin");
 			} else {
-				setError(res.data.message);
+				alert(data.message);
 			}
 		} catch (err) {
 			setError("Terjadi kesalahan, silakan coba lagi");

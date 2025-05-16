@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import com.example.TUsma.model.Admin;
 import com.example.TUsma.repository.AdminRepo;
+import com.example.TUsma.utils.JwtUtil;
 
 @RestController
 @CrossOrigin(origins = "*") // Penting untuk mengizinkan request dari domain yang berbeda
@@ -20,33 +21,24 @@ public class AdminController {
     }
     
     // Endpoint untuk login
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Admin loginRequest) {
-        System.out.println("Login request diterima: " + loginRequest.getUsername()); // Log untuk debugging
-        
-        // Cari admin berdasarkan username
-        Optional<Admin> admin = adminRepo.findByUsername(loginRequest.getUsername());
-        
-        Map<String, Object> response = new HashMap<>();
-        
-        if (admin.isPresent()) {
-            // Verifikasi password
-            if (admin.get().getPassword().equals(loginRequest.getPassword())) {
-                response.put("status", "success");
-                response.put("message", "Login berhasil");
-                response.put("admin", admin.get());
-                return ResponseEntity.ok(response);
-            } else {
-                response.put("status", "error");
-                response.put("message", "Password salah");
-                return ResponseEntity.ok(response);
-            }
-        } else {
-            response.put("status", "error");
-            response.put("message", "Username tidak ditemukan");
-            return ResponseEntity.ok(response);
-        }
+  @PostMapping("/login")
+  public ResponseEntity<?> login(@RequestBody Admin loginRequest){
+    Optional<Admin> admin = adminRepo.findByUsername(loginRequest.getUsername());
+    Map<String, Object> response = new HashMap<>();
+
+    if(admin.isPresent() && admin.get().getPassword().equals(loginRequest.getPassword())){
+        String token = JwtUtil.generateToken(admin.get().getUsername());
+
+        response.put("status", "success");
+        response.put("token", token);
+        response.put("admin" , admin.get());
+        return ResponseEntity.ok(response);
+    } else {
+        response.put("status", "error");
+        response.put("message", "Invalid username or password");
+        return ResponseEntity.status(401).body(response);
     }
+  }
     
     // Endpoint untuk memeriksa apakah API berjalan
     @GetMapping("/test")
