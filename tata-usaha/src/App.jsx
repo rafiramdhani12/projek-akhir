@@ -4,7 +4,7 @@ import Footer from "./components/Footer";
 
 import { Routes, Route } from "react-router-dom";
 import { useFetchDataSiswa } from "./hooks/FetchDataSiswa";
-import Pendaftaran from "./pages/Pendaftaran";
+
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import PrivateRoute from "./secure/PrivateRoute";
@@ -13,6 +13,7 @@ import DashBoard from "./pages/DashBoard";
 import Pelunasan from "./pages/Pelunasan";
 import Spp from "./pages/Spp";
 import LayoutPage from "./layout/LayoutPage";
+import PendaftaranMurid from "./pages/PendaftaranMurid";
 
 function App() {
 	return (
@@ -32,7 +33,7 @@ function App() {
 					path="/dashboard/admin/pendaftaran-murid-baru"
 					element={
 						<PrivateRoute>
-							<Pendaftaran />
+							<PendaftaranMurid />
 						</PrivateRoute>
 					}
 				/>
