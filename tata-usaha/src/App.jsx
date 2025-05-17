@@ -14,6 +14,8 @@ import Pelunasan from "./pages/Pelunasan";
 import Spp from "./pages/Spp";
 import LayoutPage from "./layout/LayoutPage";
 import PendaftaranMurid from "./pages/PendaftaranMurid";
+import PembayaranSpp from "./pages/PembayaranSpp";
+import History from "./pages/History";
 
 function App() {
 	return (
@@ -39,9 +41,9 @@ function App() {
 				/>
 				<Route path="/login" element={<Login />} />
 				<Route path="/dashboard/admin/pelunasan/:id" element={<Pelunasan />} />
-
 				<Route path="/dashboard/admin/bayar-spp" element={<Spp />} />
-
+				<Route path="/dashboard/admin/pembayaran/:id" element={<PembayaranSpp />} />
+				<Route path="/dashboard/admin/history-pembayaran" element={<History />} />
 				<Route path="*" element={<NotFound />} />
 			</Routes>
 		</LayoutPage>

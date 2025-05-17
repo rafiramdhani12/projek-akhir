@@ -1,13 +1,28 @@
 import axios from "axios";
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { useAuth } from "./AuthContext";
 
 const PembayaranContext = createContext();
 
 export const PembayaranProvider = ({ children }) => {
 	const [bayar, setBayar] = useState([]);
+	const [history, setHistory] = useState([]);
 
 	const { token } = useAuth();
+
+	const allHistoryPembayaran = useCallback(async () => {
+		try {
+			const res = await axios.get("http://localhost:8080/api/spp", {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			setHistory(res.data);
+			return res.data;
+		} catch (error) {
+			console.error("Gagal mengambil riwayat pembayaran", error);
+		}
+	}, [token]);
 
 	const fetchRiwayatPembayaran = async (siswaId, tahun) => {
 		try {
@@ -22,11 +37,11 @@ export const PembayaranProvider = ({ children }) => {
 		}
 	};
 
-	const pembayaranSpp = async (formData) => {
+	const pembayaranSpp = async ({ id, bulan, tahun }) => {
 		try {
 			const res = await axios.patch(
-				`http://localhost:8080/api/spp/siswa/${formData.id}/bayar/${formData.bulan}`,
-				formData,
+				`http://localhost:8080/api/spp/siswa/${id}/bayar/${bulan}`,
+				{ bulan, tahun },
 				{
 					headers: {
 						Authorization: `Bearer ${token}`,
@@ -50,8 +65,12 @@ export const PembayaranProvider = ({ children }) => {
 		}
 	};
 
+	useEffect(() => {
+		allHistoryPembayaran();
+	}, [allHistoryPembayaran]);
+
 	return (
-		<PembayaranContext.Provider value={{ bayar, pembayaranSpp, fetchRiwayatPembayaran }}>
+		<PembayaranContext.Provider value={{ history, bayar, pembayaranSpp, fetchRiwayatPembayaran, allHistoryPembayaran }}>
 			{children}
 		</PembayaranContext.Provider>
 	);

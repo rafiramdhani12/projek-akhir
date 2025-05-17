@@ -13,11 +13,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/spp")
 public class PembayaranController {
+    public static class PembayaranRequest {
+        public String bulan;
+        public int tahun;
+    }
 
     @Autowired
     private SiswaRepository siswaRepo;
@@ -27,10 +32,15 @@ public class PembayaranController {
 
     private final int NOMINAL_SPP = 170000;
 
+        @GetMapping
+    public List<Pembayaran> getAllPembayaran() {
+        return pembayaranRepo.findAll();
+    }
+
     @PatchMapping("/siswa/{id}/bayar/{bulan}")
     public ResponseEntity<?> bayarSpp(
             @PathVariable Long id,
-            @PathVariable String bulan) {
+            @RequestBody PembayaranRequest request) {
 
         // 1. Cek siswa
         Optional<Siswa> siswaOpt = siswaRepo.findById(id);
@@ -44,10 +54,10 @@ public class PembayaranController {
         boolean sudahBayar = pembayaranRepo
                 .findBySiswaIdAndTahun(id, tahun)
                 .stream()
-                .anyMatch(p -> p.getBulan().equalsIgnoreCase(bulan));
+                .anyMatch(p -> p.getBulan().equalsIgnoreCase(request.bulan));
 
         if (sudahBayar) {
-            return ResponseEntity.badRequest().body("SPP bulan " + bulan + " sudah dibayar");
+            return ResponseEntity.badRequest().body("SPP bulan " + request.bulan + " sudah dibayar");
         }
 
         // 3. Cek saldo cukup
@@ -58,7 +68,7 @@ public class PembayaranController {
         // 4. Simpan pembayaran baru
         Pembayaran pembayaran = new Pembayaran();
         pembayaran.setSiswa(siswa);
-        pembayaran.setBulan(bulan);
+        pembayaran.setBulan(request.bulan);
         pembayaran.setTahun(tahun);
         pembayaran.setNominal(NOMINAL_SPP);
         pembayaran.setStatus(StatusPembayaran.LUNAS);
@@ -70,6 +80,6 @@ public class PembayaranController {
         siswa.setBalance(siswa.getBalance() - NOMINAL_SPP);
         siswaRepo.save(siswa);
 
-        return ResponseEntity.ok("Pembayaran SPP bulan " + bulan + " berhasil");
+        return ResponseEntity.ok("Pembayaran SPP bulan " + request.bulan + " berhasil");
     }
 }

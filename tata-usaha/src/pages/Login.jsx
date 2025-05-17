@@ -1,9 +1,8 @@
-import React from "react";
-import FormLogin from "../components/FormLogin";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 import axios from "axios";
+import Form from "../components/Form";
 
 const Login = () => {
 	const [username, setUsername] = useState("");
@@ -38,7 +37,7 @@ const Login = () => {
 	};
 
 	return (
-		<FormLogin title="Login" onSubmit={handleLogin} error={error}>
+		<Form title="Login" onSubmit={handleLogin} error={error} button={"Login"}>
 			<div className="mb-4">
 				<label htmlFor="nama" className="block text-gray-700 mb-2">
 					Username
@@ -65,7 +64,7 @@ const Login = () => {
 					className="w-full px-3 py-2 border rounded-md"
 				/>
 			</div>
-		</FormLogin>
+		</Form>
 	);
 };
 

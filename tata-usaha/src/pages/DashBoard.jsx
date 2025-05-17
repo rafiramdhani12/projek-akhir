@@ -22,6 +22,9 @@ const DashBoard = () => {
 				<NavLink to="/dashboard/admin/bayar-spp" className="flex items-center gap-3 hover:text-yellow-400">
 					<span>Bayar Spp</span>
 				</NavLink>
+				<NavLink to="/dashboard/admin/history-pembayaran" className="flex items-center gap-3 hover:text-yellow-400">
+					<span>History Pembayaran</span>
+				</NavLink>
 			</SideBar>
 
 			{/* Tabel di kanan, isi halaman */}

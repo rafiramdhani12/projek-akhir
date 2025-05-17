@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import FormPendaftaran from "../components/FormPendaftaran";
+import React, { useEffect, useState } from "react";
+
 import { useSiswa } from "../context/SiswaContext";
+import Form from "../components/Form";
+import CheckBox from "../components/CheckBox";
 
 const PendaftaranMurid = () => {
 	const { tambahSiswa } = useSiswa();
@@ -11,6 +13,38 @@ const PendaftaranMurid = () => {
 		balance: 0,
 	});
 	const [error, setError] = useState("");
+
+	const paymentItems = [
+		{ id: 1, title: "uang daftar", value: 1000000 },
+		{ id: 2, title: "uang baju", value: 500000 },
+		{ id: 3, title: "uang buku", value: 600000 },
+		{ id: 4, title: "uang atribut", value: 400000 },
+	];
+
+	const [selectedPayments, setSelectedPayments] = useState([]);
+
+	const handleChexboxChange = (item) => {
+		setSelectedPayments((prev) => {
+			const isSelected = prev.some((p) => p.id === item.id);
+
+			if (isSelected) {
+				return prev.filter((p) => p.id !== item.id);
+			} else {
+				return [...prev, item];
+			}
+		});
+	};
+
+	useEffect(() => {
+		const total = selectedPayments.reduce((sum, item) => sum + item.value, 0);
+
+		if (total > 2500000) {
+			setError("Total tidak boleh lebih dari 2.500.000");
+		} else {
+			setError("");
+			setFormData((prev) => ({ ...prev, balance: total }));
+		}
+	}, [selectedPayments]);
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -45,7 +79,7 @@ const PendaftaranMurid = () => {
 	};
 
 	return (
-		<FormPendaftaran title="Pendaftaran Murid Baru" onSubmit={handleSubmit} error={error}>
+		<Form title="Pendaftaran Murid Baru" onSubmit={handleSubmit} error={error} button="Daftar">
 			<div className="mb-4">
 				<label className="block text-gray-700 mb-2" htmlFor="nama">
 					Nama Lengkap
@@ -91,9 +125,20 @@ const PendaftaranMurid = () => {
 				/>
 			</div>
 
+			<div className="flex flex-wrap justify-start mb-4 p-5 gap-3 border  rounded-md shadow-lg ">
+				{paymentItems.map((item) => (
+					<CheckBox
+						title={item.title}
+						value={item.value}
+						checked={selectedPayments.some((p) => p.id === item.id)}
+						onChange={() => handleChexboxChange(item)}
+					/>
+				))}
+			</div>
+
 			<div className="mb-4">
 				<label className="block text-gray-700 mb-2" htmlFor="balance">
-					Uang Daftar
+					Uang Daftar (total : Rp {formData.balance.toLocaleString("id-ID")})
 				</label>
 				<input
 					type="number"
@@ -103,11 +148,12 @@ const PendaftaranMurid = () => {
 					onChange={handleChange}
 					className="w-full px-3 py-2 border rounded-md"
 					required
+					readOnly
 					min={0}
 					max={2500000}
 				/>
 			</div>
-		</FormPendaftaran>
+		</Form>
 	);
 };
 

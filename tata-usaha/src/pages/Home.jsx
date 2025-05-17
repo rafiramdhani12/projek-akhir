@@ -8,7 +8,7 @@ const Home = () => {
 			<div className="container mx-auto px-4 py-8">
 				{/* Header */}
 				<header className="mb-12 text-center">
-					<h1 className="text-4xl font-bold text-blue-800 mb-2">TATA USAHA SMA JOMOK</h1>
+					<h1 className="text-4xl font-bold text-blue-800 mb-2">TATA USAHA SMA JIHAD</h1>
 					<p className="text-xl text-gray-600">Kota Bekasi</p>
 				</header>
 
@@ -18,7 +18,7 @@ const Home = () => {
 						<div className="order-2 md:order-1">
 							<h2 className="text-3xl font-semibold text-gray-800 mb-4">Selamat Datang di Website Resmi</h2>
 							<p className="text-lg text-gray-600 mb-6">
-								SMA Jomok Kota Bekasi merupakan institusi pendidikan yang berkomitmen untuk memberikan pelayanan terbaik
+								SMA JIHAD Kota Bekasi merupakan institusi pendidikan yang berkomitmen untuk memberikan pelayanan terbaik
 								dalam bidang administrasi dan tata usaha.
 							</p>
 							<NavLink
@@ -41,9 +41,9 @@ const Home = () => {
 							<span className="text-gray-500">[Logo Yayasan]</span>
 						</div>
 						<div className="w-full md:w-2/3">
-							<h2 className="text-2xl font-bold text-gray-800 mb-4">Yayasan Bapak Jomok</h2>
+							<h2 className="text-2xl font-bold text-gray-800 mb-4">Yayasan Bapak Jihad</h2>
 							<p className="text-gray-600 mb-4">
-								Sebagai penyelenggara pendidikan, Yayasan Bapak Jomok telah berkomitmen untuk memajukan pendidikan di
+								Sebagai penyelenggara pendidikan, Yayasan Bapak jihad telah berkomitmen untuk memajukan pendidikan di
 								Kota Bekasi sejak tahun 1985.
 							</p>
 							<p className="text-gray-600">

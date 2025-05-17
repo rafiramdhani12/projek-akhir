@@ -5,8 +5,23 @@ const Tabel = ({ headers = [], data = [], searchKeys = [], renderRow = () => [] 
 	const [currentPage, setCurrentPage] = useState(1);
 
 	const filteredData = data.filter((item) =>
-		searchKeys.some((key) => item[key]?.toString().toLowerCase().includes(search.toLowerCase()))
+		searchKeys.some((key) => {
+			// Handle nested properties (misal: "siswa.nama")
+			const keys = key.split(".");
+			let value = item;
+			for (const k of keys) {
+				value = value?.[k];
+				if (value === undefined) break;
+			}
+			return value?.toString().toLowerCase().includes(search.toLowerCase());
+		})
 	);
+
+	const handleChange = (e) => {
+		setCurrentPage(1);
+		setSearch(e.target.value);
+		console.log(e.target.value);
+	};
 
 	const itemsPerPage = 25;
 	const indexOfLast = currentPage * itemsPerPage;
@@ -22,10 +37,7 @@ const Tabel = ({ headers = [], data = [], searchKeys = [], renderRow = () => [] 
 					placeholder="Cari..."
 					className="input input-bordered w-full max-w-xs"
 					value={search}
-					onChange={(e) => {
-						setSearch(e.target.value);
-						setCurrentPage(1); // Reset page kalau search berubah
-					}}
+					onChange={handleChange}
 				/>
 			</div>
 

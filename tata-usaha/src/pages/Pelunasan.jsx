@@ -27,7 +27,7 @@ const Pelunasan = () => {
 		};
 		try {
 			await pelunasan(updateData);
-			navigate("/dashboard");
+			navigate("/dashboard/admin");
 		} catch (err) {
 			console.error(`gagal update siswa : ${err}`);
 		}

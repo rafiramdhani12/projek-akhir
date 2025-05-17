@@ -1,11 +1,13 @@
-const FormLogin = ({ title, children, onSubmit, error }) => {
+import React from "react";
+
+const Form = ({ title, children, onSubmit, error, button }) => {
 	return (
 		<div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md mb-10 mt-10">
 			<h2 className="text-xl font-semibold mb-4">{title}</h2>
 			<form onSubmit={onSubmit}>
 				{children}
 				<button type="submit" className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
-					Login
+					{button}
 				</button>
 				{error && <p className="text-red-500 mt-2">{error}</p>}
 			</form>
@@ -13,4 +15,4 @@ const FormLogin = ({ title, children, onSubmit, error }) => {
 	);
 };
 
-export default FormLogin;
+export default Form;
