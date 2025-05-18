@@ -8,6 +8,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig {
 
+    /*
+     * ini adalah web config yg isinya untuk mengatur cors secara global agar semua restapi yg telah dibuat bisa ditangkap oleh frontend
+     */
+
     @Bean
     public WebMvcConfigurer corsConfigurer(){
         return new WebMvcConfigurer() {

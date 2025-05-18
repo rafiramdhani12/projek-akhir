@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 
+// * dan disini ada context ini adalah fitur di react yg memudahkan kita untuk memanipulasi data global di aplikasi kita menghindarkan kita dari props drilling yg nanti akan menyulikkan pengembang untuk maintenance
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {

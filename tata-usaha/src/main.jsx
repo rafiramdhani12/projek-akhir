@@ -9,6 +9,7 @@ import { PembayaranProvider } from "./context/PembayaranSppContext.jsx";
 import { UtilProvider } from "./context/UtilContext.jsx";
 
 createRoot(document.getElementById("root")).render(
+	// * ini adalah awalan dari aplikasi tu sma App / pusatnya dibungkus oleh browser router auth siswa pembayaran util provider
 	<StrictMode>
 		<BrowserRouter>
 			<AuthProvider>

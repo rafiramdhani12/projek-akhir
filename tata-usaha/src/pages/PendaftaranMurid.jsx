@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSiswa } from "../context/SiswaContext";
 import Form from "../components/Form";
 import CheckBox from "../components/CheckBox";
+import Button from "../components/Button";
 
 const PendaftaranMurid = () => {
 	const { tambahSiswa } = useSiswa();
@@ -80,6 +81,14 @@ const PendaftaranMurid = () => {
 
 	return (
 		<Form title="Pendaftaran Murid Baru" onSubmit={handleSubmit} error={error} button="Daftar">
+			<div className="mb-4">
+				<Button
+					className={"btn btn-error text-white rounded-lg"}
+					onClick={() => window.history.back()}
+					content={"back"}>
+					back
+				</Button>
+			</div>
 			<div className="mb-4">
 				<label className="block text-gray-700 mb-2" htmlFor="nama">
 					Nama Lengkap

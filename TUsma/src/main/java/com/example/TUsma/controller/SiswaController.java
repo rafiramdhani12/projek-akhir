@@ -3,20 +3,20 @@ package com.example.TUsma.controller;
 
 import com.example.TUsma.model.Siswa;
 import com.example.TUsma.repository.SiswaRepository;
-
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
+/*
+ * disini ada controller siswa gunanya untuk menghubungkan logika bisnis , model dan view
+ */
+
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/api/siswa")
+@CrossOrigin(origins = "http://localhost:5173") // ini untuk mengijinkan cors mengakses api engan port 5173 (vite)
+@RequestMapping("/api/siswa") // dan ini adalah endpoint dari siswa nya
 public class SiswaController {
+    
     private final SiswaRepository siswaRepository;
     
     public SiswaController(SiswaRepository siswaRepository){

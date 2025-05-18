@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { useSiswa } from "../context/SiswaContext";
 import { useState } from "react";
+import Button from "../components/Button";
 
 const Spp = () => {
 	const { siswa } = useSiswa();
@@ -42,8 +43,8 @@ const Spp = () => {
 
 	return (
 		<>
-			<div className="overflow-x-auto">
-				<div className="flex justify-end mt-5 mb-5">
+			<div className="overflow-x-auto ml-5">
+				<div className="flex justify-end mt-5">
 					<select className="select select-bordered" value={selectedClass} onChange={handleChange}>
 						<option value="all">Semua Kelas</option>
 						{kelas.map((item, i) => (
@@ -53,7 +54,9 @@ const Spp = () => {
 						))}
 					</select>
 				</div>
-
+				<div className="mb-4">
+					<Button className={"btn btn-error text-white "} content={"back"} onClick={() => window.history.back()} />
+				</div>
 				<table className="table">
 					<thead>
 						<tr>

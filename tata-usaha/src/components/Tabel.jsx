@@ -1,9 +1,12 @@
 import { useState } from "react";
 
+// * di component ini sengaja dibuat seperti ini yg artinya adalah reusable component yg dmn component nya bisa digunakan di manapun
 const Tabel = ({ headers = [], data = [], searchKeys = [], renderRow = () => [] }) => {
+	//* parameter diatas menampung props yg dmn akan di gunakan/diolah di component ini props ini menampung data yg dilempar dari depan dan diolah disini
 	const [search, setSearch] = useState("");
 	const [currentPage, setCurrentPage] = useState(1);
 
+	// *filtered data mengambil value dari props data
 	const filteredData = data.filter((item) =>
 		searchKeys.some((key) => {
 			// Handle nested properties (misal: "siswa.nama")
@@ -23,9 +26,12 @@ const Tabel = ({ headers = [], data = [], searchKeys = [], renderRow = () => [] 
 		console.log(e.target.value);
 	};
 
+	// * ini untuk mengatur pagination dmn max dari jumlah per page ada di 25 item
 	const itemsPerPage = 25;
 	const indexOfLast = currentPage * itemsPerPage;
 	const indexOfFirst = indexOfLast - itemsPerPage;
+
+	// * dan ini untuk  memfilter data yg ada kaitannya dengan variable yg ada diatas dari filteredData
 	const currentData = filteredData.slice(indexOfFirst, indexOfLast);
 	const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 

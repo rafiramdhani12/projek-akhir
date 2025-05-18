@@ -1,9 +1,13 @@
 package com.example.TUsma.model;
 
 import java.util.List;
-import java.util.Map;
 
 import jakarta.persistence.*;
+
+/*
+ * dokumentasi jadi ini adalah model siswa dimana ada id, nama, kelas, nisn, balance model ini dibuat dengan entity yg dmn itu library untuk memudahkan kita membuat dtabel di db
+ * ada one to many yg artinya satu siswa bisa memiliki banyak pembayaran yg dmn itu ada kaitanya dengan model pembayaran
+ */
 
 @Entity
 public class Siswa {
