@@ -49,7 +49,6 @@ export const PembayaranProvider = ({ children }) => {
 				}
 			);
 			const pembayaranBaru = res.data;
-
 			// Jika belum ada, tambahkan ke list
 			setBayar((prev) => {
 				const sudahAda = prev.some((b) => b.id === pembayaranBaru.id);
@@ -59,6 +58,11 @@ export const PembayaranProvider = ({ children }) => {
 					return [...prev, pembayaranBaru];
 				}
 			});
+
+			// refresh history data
+			await allHistoryPembayaran();
+
+			return pembayaranBaru;
 		} catch (error) {
 			console.error(`pembayaran gagal : ${error}`);
 			throw error;
@@ -66,7 +70,10 @@ export const PembayaranProvider = ({ children }) => {
 	};
 
 	useEffect(() => {
-		allHistoryPembayaran();
+		const loadData = async () => {
+			await allHistoryPembayaran();
+		};
+		loadData();
 	}, [allHistoryPembayaran]);
 
 	return (
