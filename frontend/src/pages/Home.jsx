@@ -37,8 +37,7 @@ const Home = () => {
 				<section className="bg-white p-8 rounded-lg shadow-md mb-16">
 					<div className="flex flex-col md:flex-row items-center gap-8">
 						<div className="w-full md:w-1/3 bg-gray-100 rounded-lg h-48 flex items-center justify-center">
-							{/* Placeholder for logo */}
-							<span className="text-gray-500">[Logo Yayasan]</span>
+							<img src="public/image/kepala yayasan.jpg" />
 						</div>
 						<div className="w-full md:w-2/3">
 							<h2 className="text-2xl font-bold text-gray-800 mb-4">Yayasan Bapak Jihad</h2>

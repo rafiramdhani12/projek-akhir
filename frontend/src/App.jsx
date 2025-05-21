@@ -16,37 +16,41 @@ import LayoutPage from "./layout/LayoutPage";
 import PendaftaranMurid from "./pages/PendaftaranMurid";
 import PembayaranSpp from "./pages/PembayaranSpp";
 import History from "./pages/History";
+import Pemasukan from "./pages/Pemasukan";
 
 function App() {
 	return (
-		<LayoutPage>
-			{/* Konten Utama */}
-			<Routes>
-				<Route path="/" element={<Home />} />
-				<Route
-					path="/dashboard/admin"
-					element={
-						<PrivateRoute>
-							<DashBoard />
-						</PrivateRoute>
-					}
-				/>
-				<Route
-					path="/dashboard/admin/pendaftaran-murid-baru"
-					element={
-						<PrivateRoute>
-							<PendaftaranMurid />
-						</PrivateRoute>
-					}
-				/>
-				<Route path="/login" element={<Login />} />
-				<Route path="/dashboard/admin/pelunasan/:id" element={<Pelunasan />} />
-				<Route path="/dashboard/admin/bayar-spp" element={<Spp />} />
-				<Route path="/dashboard/admin/pembayaran/:id" element={<PembayaranSpp />} />
-				<Route path="/dashboard/admin/history-pembayaran" element={<History />} />
-				<Route path="*" element={<NotFound />} />
-			</Routes>
-		</LayoutPage>
+		<>
+			<LayoutPage>
+				{/* Konten Utama */}
+				<Routes>
+					<Route path="/" element={<Home />} />
+					<Route
+						path="/dashboard/admin"
+						element={
+							<PrivateRoute>
+								<DashBoard />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path="/dashboard/admin/pendaftaran-murid-baru"
+						element={
+							<PrivateRoute>
+								<PendaftaranMurid />
+							</PrivateRoute>
+						}
+					/>
+					<Route path="/login" element={<Login />} />
+					<Route path="/dashboard/admin/pelunasan/:id" element={<Pelunasan />} />
+					<Route path="/dashboard/admin/bayar-spp" element={<Spp />} />
+					<Route path="/dashboard/admin/pembayaran/:id" element={<PembayaranSpp />} />
+					<Route path="/dashboard/admin/history-pembayaran" element={<History />} />
+					<Route path="/dashboard/admin/prediksi-pemasukan" element={<Pemasukan />} />
+					<Route path="*" element={<NotFound />} />
+				</Routes>
+			</LayoutPage>
+		</>
 	);
 }
 
