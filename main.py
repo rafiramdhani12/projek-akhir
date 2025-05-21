@@ -4,43 +4,50 @@ antrian = deque()
 
 def tampilkan_antrian():
     if not antrian:
-        print("antrian kosong.")
+        print("\n antrian kosong.")
     else:
-        print("daftar antrian saat ini: ")
-        for i,nama in enumerate(antrian,start=1):
-            print(f"{i}. {nama}")
+        print("\n daftar antrian saat ini: ")
+        for i,(nama , pesanan) in enumerate(antrian,start=1):
+            print(f"{i}. {nama} , pesanan {pesanan}\n")
             
 def tambah_antrian():
     nama = input("masukkan nama: ")
-    antrian.append(nama)
-    print(f"antrian {nama} ditambahkan.")
+    pesananan = input("masukkan pesanan: ")
+    antrian.append((nama, pesananan)) # simpan sebagai tuple
+    print(f"\n antrian {nama} , pesananan {pesananan} ditambahkan.")
     
 def layani_antrian():
     if not antrian:
-        print("tidak ada antrian yg perlu dilayani")
+        print("\n tidak ada antrian yg perlu dilayani")
     else:
-        nama = antrian.popleft()
-        print(f"{nama} sedang di layani.")
+        nama,pesanan = antrian.popleft()
+        print(f"\n {nama} sedang di layani. (pesananan: {pesanan})")
+        
+def customer():
+    print("selamat datang di resto pak memek")
+    tambah_antrian()
 
 def menu():
-    while True:
-        print("\n--- MENU ANTRIAN ---")
-        print("1. Tambah Antrian")
-        print("2. Layani Antrian")
-        print("3. Tampilkan Antrian")
-        print("4. Keluar")
-        pilihan = input("Pilih menu (1-4): ")
+    try:
+        for i in range(2):
+            customer()
 
-        if pilihan == '1':
-            tambah_antrian()
-        elif pilihan == '2':
-            layani_antrian()
-        elif pilihan == '3':
-            tampilkan_antrian()
-        elif pilihan == '4':
-            print("Program selesai.")
-            break
-        else:
-            print("Pilihan tidak valid!")
+        while True:
+            print("\n")
+            print("1. Layani Antrian")
+            print("2. Tampilkan Antrian")
+            print("3. Keluar")
+            pilihan = input("Pilih menu (1-3): ")
 
+            if pilihan == '1':
+                    layani_antrian()
+            elif pilihan == '2':
+                    tampilkan_antrian()
+            elif pilihan == '3':
+                    print("Program selesai.")
+                    break
+            else:
+                    print("Pilihan tidak valid!")
+    except KeyboardInterrupt:
+        print("\nmesin telah dimatikan")
 menu()
