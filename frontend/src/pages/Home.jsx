@@ -1,8 +1,13 @@
 import { NavLink } from "react-router-dom";
 
 import React from "react";
+import { useAuth } from "../context/AuthContext";
 
 const Home = () => {
+
+	const {admin} = useAuth();
+
+
 	return (
 		<div className="min-h-screen bg-gray-50">
 			<div className="container mx-auto px-4 py-8">
@@ -21,11 +26,12 @@ const Home = () => {
 								SMA JIHAD Kota Bekasi merupakan institusi pendidikan yang berkomitmen untuk memberikan pelayanan terbaik
 								dalam bidang administrasi dan tata usaha.
 							</p>
-							<NavLink
+							{admin ? (<p>selamat bertugas : <span className="text-green-600 font-semibold">{admin.username}</span></p>) : (	<NavLink
 								to="/login"
 								className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300">
 								Login
-							</NavLink>
+							</NavLink>)}
+						
 						</div>
 						<div className="order-1 md:order-2 overflow-hidden h-64 md:h-80 flex items-center justify-center">
 							<img src="public/image/ElmorejrHigh.jpg" alt="sekolah" />
