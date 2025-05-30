@@ -7,7 +7,10 @@ public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String username;
+    private String name;
+    private String address;
+    private String country;
+    private String city;
     private String password;
 
 
@@ -19,12 +22,36 @@ public class Admin {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+      public void setAddress(String address) { 
+        this.address = address;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCity() {
+        return city;
     }
 
     public String getPassword() {

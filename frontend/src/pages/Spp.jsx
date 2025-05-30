@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useSiswa } from "../context/SiswaContext";
 import { useState } from "react";
 import Button from "../components/Button";
@@ -41,6 +41,12 @@ const Spp = () => {
 
 	const filteredSiswa = selectedClass === "all" ? siswa : siswa.filter((s) => s.kelas === selectedClass);
 
+	const navigate = useNavigate()
+
+	const handleBack = () => {
+		navigate("/dashboard/admin")
+	}
+
 	return (
 		<>
 			<div className="overflow-x-auto ml-5">
@@ -55,7 +61,7 @@ const Spp = () => {
 					</select>
 				</div>
 				<div className="mb-4">
-					<Button className={"btn btn-error text-white "} content={"back"} onClick={() => window.history.back()} />
+					<Button className={"btn btn-error text-white "} content={"back"} onClick={handleBack} />
 				</div>
 				<table className="table">
 					<thead>

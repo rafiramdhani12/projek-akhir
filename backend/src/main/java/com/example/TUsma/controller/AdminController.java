@@ -23,11 +23,11 @@ public class AdminController {
     // Endpoint untuk login
   @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody Admin loginRequest){
-    Optional<Admin> admin = adminRepo.findByUsername(loginRequest.getUsername());
+    Optional<Admin> admin = adminRepo.findByName(loginRequest.getName());
     Map<String, Object> response = new HashMap<>();
 
     if(admin.isPresent() && admin.get().getPassword().equals(loginRequest.getPassword())){
-        String token = JwtUtil.generateToken(admin.get().getUsername());
+        String token = JwtUtil.generateToken(admin.get().getName());
 
         response.put("status", "success");
         response.put("token", token);
