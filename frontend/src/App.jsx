@@ -17,6 +17,7 @@ import PendaftaranMurid from "./pages/PendaftaranMurid";
 import PembayaranSpp from "./pages/PembayaranSpp";
 import History from "./pages/History";
 import Pemasukan from "./pages/Pemasukan";
+import Test from "./pages/Test";
 
 function App() {
 	return (
@@ -47,6 +48,7 @@ function App() {
 					<Route path="/dashboard/admin/pembayaran/:id" element={<PembayaranSpp />} />
 					<Route path="/dashboard/admin/history-pembayaran" element={<History />} />
 					<Route path="/dashboard/admin/prediksi-pemasukan" element={<Pemasukan />} />
+					<Route path="/test" element={<Test />} />
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</LayoutPage>
