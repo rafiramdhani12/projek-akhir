@@ -17,6 +17,10 @@ const DaftarTu = () => {
         navigate("/dashboard/admin/tambah-tu")
     }
 
+    const handleEdit = (id) =>{
+        navigate(`/dashboard/admin/edit-tata-usaha/${id}`)
+    }
+
   return (
    <>
     <Button onClick={handleBack} className={"btn btn-error text-white"} content={"back"} />
@@ -25,9 +29,9 @@ const DaftarTu = () => {
         <Button className={"primary"} content={"tambah tu"} onClick={handleAdd} />
     </div>
   <Tabel
-    headers={["No", "Name", "address", "city", "Aksi"]}
+    headers={["No", "Name", "address", "city", "country","password","Aksi"]}
     data={tataUsaha}	
-    searchKeys={["name", "address", "city"]}
+    searchKeys={["name", "address", "city" , "country" , "password"]}
     renderRow={(currentData) =>
         currentData.map((item, index) => (
             <tr key={item.id}>
@@ -36,9 +40,11 @@ const DaftarTu = () => {
                 <td>{item.name}</td>
                 <td>{item.address}</td>
                 <td>{item.city}</td>
+                <td>{item.country}</td>
+                <td>{item.password}</td>
                 <td>
                     <div className="flex gap-3">
-                    <Button content={"update"} className={"primary"}/>
+                    <Button content={"update"} className={"primary"} onClick={() => handleEdit(item.id)}/>
                     <Button content={"delete"} className={"error"} onClick={() => hapusTu(item.id)} />
                     </div>
                 </td>

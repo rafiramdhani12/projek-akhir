@@ -52,7 +52,7 @@ const CetakPembayaran = forwardRef(({ data }, ref) => {
         <p>Bekasi, {new Date().toLocaleDateString()}</p>
         <div className="mt-12">
           <p>(___________________)</p>
-          <p>Petugas: {name}</p>
+          <p>Tata usaha: {name}</p>
         </div>
       </div>
     </div>

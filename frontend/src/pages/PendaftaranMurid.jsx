@@ -1,32 +1,51 @@
-// ... import seperti biasa
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useSiswa } from "../context/SiswaContext";
 import Form from "../components/Form";
 import CheckBox from "../components/CheckBox";
 import Button from "../components/Button";
-
-import { useReactToPrint } from "react-to-print";
 import CetakPembayaran from "./CetakPembayaran";
 import { useUtil } from "../context/UtilContext";
+import { useParams } from "react-router-dom";
 
 const PendaftaranMurid = () => {
-  const { tambahSiswa } = useSiswa();
-  
-  const { paymentItems, addPaymentItems, loading, formOption, setFormOption, fetchPaymentItems } = useUtil();
+  const { id } = useParams();
+  const {
+    paymentItems,
+    addPaymentItems,
+    loading,
+    formOption,
+    setFormOption,
+    fetchPaymentItems,
+    error,
+    contentRef,
+    formData,
+    setFormData,
+    setError,
+    handleSubmitAndPrint,
+    selectedPayments,
+    setSelectedPayments,
+    selectedClass,
+    setSelectedClass,
+  } = useUtil();
 
-
-  const [formData, setFormData] = useState({ nama: "", kelas: "", nisn: "", balance: 0 });
- 
-  const [error, setError] = useState("");
-
-  const [selectedPayments, setSelectedPayments] = useState([]);
-  const [selectedClass, setSelectedClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddPaymentModalOpen, setIsAddPaymentModalOpen] = useState(false);
+  const [isEditPaymentModalOpen, setIsEditPaymentOpen] = useState(false);
+  const [editId, setEditId] = useState(null);
 
-  const contentRef = useRef();
-  const printBill = useReactToPrint({ content: () => contentRef.current });
+  const dataPayment = paymentItems.find((s) => s.id === parseInt(id));
+  // memfilter dataPayment dengan id tertentu
+
+  useEffect(() => {
+    if (dataPayment) {
+      setFormOption({
+        title: dataPayment.title,
+        value: dataPayment.value,
+      });
+    }
+  }, [dataPayment]);
+  // ini adalah useEffect yg guna nya untuk memantau state yg diubah dengan alur jika dataPayment ada nilainya maka setFormOption yg mengandung title dan value dan dirender dengan depedency [] yg maksudnya dirender setiap state payment item nya berubah
+
 
   const classOptions = [
     { id: 1, title: "10 IPA 1" },
@@ -39,88 +58,81 @@ const PendaftaranMurid = () => {
     { id: 8, title: "10 IPS 4" },
   ];
 
-  
-
   const handleCheckboxClass = (item) => {
+
     setSelectedClass((prev) => {
+      // parameter setSelectedClass disini mengandung function select berdasarkan id dan update 
       const isSelected = prev.some((p) => p.id === item.id);
       const updated = isSelected ? prev.filter((p) => p.id !== item.id) : [...prev, item];
+      // yg dimana update ini jika di select akan merender function filter jika tidak akan merender hasil dari spread operator dan item
 
       setFormData((prevForm) => ({
         ...prevForm,
         kelas: updated.map((k) => k.title).join(", "),
       }));
+      // pada bagian ini setFormData memiliki parameter prevForm yg dmn maksudnya adalah mengambil data sebelumnya dan digabung menggunakan spread operator dan properti kelas berisi variable update yg dimap untuk mengambil title row di database dan di join 
 
       return updated;
+      // yg terakhir mengembalikan nilai update
     });
+
   };
 
   const handleCheckboxChange = (item) => {
+
+    // yg disini kurang lebih juga sama jadi handle ini akan mengambil nilai item dengan parameternya lalu didalamnya ada setSelectedPayment yg akan merubah nilai selectedPayment 
     setSelectedPayments((prev) => {
       const isSelected = prev.some((p) => p.id === item.id);
       return isSelected ? prev.filter((p) => p.id !== item.id) : [...prev, item];
     });
+    
   };
 
   useEffect(() => {
     const total = selectedPayments.reduce((sum, item) => sum + item.value, 0);
+    //  nah yg disini ada total dmn artinya nilai / value dari selectedPayment akan di reduce / digabungkan menjadi 1 array di dalam method reduce itu ada accumulator di slot pertama dan current di slot ke 2 
+
     if (total > 2500000) {
       setError("Total tidak boleh lebih dari 2.500.000");
     } else {
       setError("");
       setFormData((prev) => ({ ...prev, balance: total }));
     }
+
   }, [selectedPayments]);
 
   const handleChange = (e) => {
+
     const { name, value } = e.target;
+    // nah yg ini kalo g salah namanya reconstruction function jadi ini untuk memberi 1 nilai untuk beberapa variable jadi daripada name e.target dan ketik ulang di value mending pakai cara ini 
 
     if (name === "balance" && Number(value) > 2500000) {
       setFormData({ ...formData, balance: 2500000 });
       setError("Balance tidak boleh lebih dari 2.500.000");
       return;
     }
+    // nah ini itu biasa sering dibuat seperti untuk efisiensi karena handleChange ini dibuat dinamis name === "balance" disini itu untuk menangkap atribut name yg ada di input , jadi cara baca nya jika nama = balance dan value nya lebih dari 2jt500 maka error
 
-    setFormData({ ...formData, [name]: value });
+    setFormData({ ...formData, [name]: value }); // yg ini juga sama maksudnya misal [nama]:value [nisn]:value
     setError("");
-  };
 
-  const handleSubmit = async () => {
-    if (formData.balance > 2500000) {
-      setError("Balance tidak boleh lebih dari 2.500.000");
-      return;
-    }
-
-    console.log("Submit data:", formData);
-    console.log("Selected payments:", selectedPayments);
-
-    try {
-      await tambahSiswa(formData);
-      setFormData({ nama: "", kelas: "", nisn: "", balance: 0 });
-      setSelectedPayments([]);
-      setSelectedClass([]);
-    } catch (err) {
-      alert(`Gagal menambahkan siswa: ${err}`);
-    }
-  };
-
-  const handleSubmitAndPrint = async () => {
-    await handleSubmit();
-    printBill();
   };
 
   const handleDelete = async (id) => {
+
     try {
       await axios.delete(`http://localhost:8080/api/payment-items/${id}`);
       await fetchPaymentItems();
     } catch (err) {
       console.log(err);
     }
+
   };
 
   return (
     <>
       <Form title="Pendaftaran Murid Baru" onSubmit={(e) => e.preventDefault()} error={error} button={null}>
+
         <Button className="btn btn-error text-white rounded-lg mb-4" onClick={() => window.history.back()} content="Back" />
 
         {/* Nama */}
@@ -167,7 +179,7 @@ const PendaftaranMurid = () => {
         <Button className="btn btn-success p-2" content="Cetak dan Bayar" onClick={handleSubmitAndPrint} />
       </Form>
 
-      {/* Modal */}
+      {/* Modal Options */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
@@ -192,7 +204,11 @@ const PendaftaranMurid = () => {
                       <td>Rp {item.value.toLocaleString("id-ID")}</td>
                       <td>
                         <div className="flex gap-2">
-                          <Button className="btn btn-primary p-2" content="Edit" />
+                          <Button className="btn btn-primary p-2" content="Edit" onClick={() => {
+                            setIsEditPaymentOpen(true);
+                            setFormOption({ title: item.title, value: item.value });
+                            setEditId(item.id);
+                          }} />
                           <Button className="btn btn-error p-2 text-white" content="Delete" onClick={() => handleDelete(item.id)} />
                         </div>
                       </td>
@@ -213,27 +229,47 @@ const PendaftaranMurid = () => {
             <h2 className="text-lg font-bold mb-4">Tambah Payment Item</h2>
             <div className="mb-4">
               <label className="block text-gray-700 mb-1">Judul Pembayaran</label>
-              <input
-                type="text"
-                name="title"
-                value={formOption.title}
-                onChange={(e) => setFormOption({ ...formOption, [e.target.name]: e.target.value })}
-                className="w-full px-3 py-2 border rounded-md"
-              />
+              <input type="text" name="title" value={formOption.title} onChange={(e) => setFormOption({ ...formOption, [e.target.name]: e.target.value })} className="w-full px-3 py-2 border rounded-md" />
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 mb-1">Nominal</label>
-              <input
-                type="number"
-                name="value"
-                value={formOption.value}
-                onChange={(e) => setFormOption({ ...formOption, [e.target.name]: Number(e.target.value) })}
-                className="w-full px-3 py-2 border rounded-md"
-              />
+              <input type="number" name="value" value={formOption.value} onChange={(e) => setFormOption({ ...formOption, [e.target.name]: Number(e.target.value) })} className="w-full px-3 py-2 border rounded-md" />
             </div>
             <Button className="btn btn-success p-2" content="Simpan" onClick={async () => {
               await addPaymentItems();
               setIsAddPaymentModalOpen(false);
+            }} />
+          </div>
+        </div>
+      )}
+
+      {/* Modal Edit Payment */}
+      {isEditPaymentModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <Button onClick={() => setIsEditPaymentOpen(false)} className="btn btn-error text-white p-2 mb-4" content="Tutup" />
+            <h2 className="text-lg font-bold mb-4">Edit Payment Item</h2>
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-1">Judul Pembayaran</label>
+              <input type="text" name="title" value={formOption.title} onChange={(e) => setFormOption({ ...formOption, [e.target.name]: e.target.value })} className="w-full px-3 py-2 border rounded-md" />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-1">Nominal</label>
+              <input type="number" name="value" value={formOption.value} onChange={(e) => setFormOption({ ...formOption, [e.target.name]: Number(e.target.value) })} className="w-full px-3 py-2 border rounded-md" />
+            </div>
+            <Button className="btn btn-success p-2" content="Simpan" onClick={async () => {
+              try {
+                await axios.patch(`http://localhost:8080/api/payment-items/edit/${editId}`, {
+                  title: formOption.title,
+                  value: formOption.value,
+                });
+                await fetchPaymentItems();
+                setIsEditPaymentOpen(false);
+                setFormOption({ title: "", value: 0 });
+                setEditId(null);
+              } catch (err) {
+                console.log(err);
+              }
             }} />
           </div>
         </div>

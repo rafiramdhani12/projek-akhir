@@ -23,7 +23,8 @@ const AddTu = () => {
   };
 
   return (
-    <Form title="Tambah TU" onSubmit={handleSubmit}>
+    <Form title="Tambah TU" onSubmit={handleSubmit} button={"simpan"} className={"success"}>
+
       <div className="mb-4">
         <label htmlFor="name" className="block text-gray-700 mb-2">Nama</label>
         <input
@@ -36,6 +37,7 @@ const AddTu = () => {
           required
         />
       </div>
+
       <div className="mb-4">
         <label htmlFor="address" className="block text-gray-700 mb-2">Alamat</label>
         <input
@@ -48,6 +50,7 @@ const AddTu = () => {
           required
         />
       </div>
+
       <div className="mb-4">
         <label htmlFor="city" className="block text-gray-700 mb-2">Kota</label>
         <input
@@ -60,6 +63,7 @@ const AddTu = () => {
           required
         />
       </div>
+
       <div className="mb-4">
         <label htmlFor="country" className="block text-gray-700 mb-2">Negara</label>
         <input
@@ -72,6 +76,7 @@ const AddTu = () => {
           required
         />
       </div>
+
       <div className="mb-4">
         <label htmlFor="password" className="block text-gray-700 mb-2">Password</label>
         <input
@@ -84,12 +89,6 @@ const AddTu = () => {
           required
         />
       </div>
-      <button
-        type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-      >
-        Simpan
-      </button>
     </Form>
   );
 };

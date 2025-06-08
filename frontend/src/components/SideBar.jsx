@@ -15,6 +15,7 @@ const SideBar = ({ title, children }) => {
 
 	return (
 		<div className="h-screen w-64 bg-gray-800 text-white flex flex-col p-4 shadow-lg">
+
 			<h2 className="text-2xl font-bold mb-6">{title}</h2>
 
 			<nav className="flex flex-col gap-4">{children}</nav>
@@ -30,6 +31,7 @@ const SideBar = ({ title, children }) => {
 			<div className="mt-auto pt-6 border-t border-gray-600">
 				<p className="text-sm text-gray-400">© {year} - Tata Usaha SMA Jomok Kota Bekasi</p>
 			</div>
+			
 		</div>
 	);
 };

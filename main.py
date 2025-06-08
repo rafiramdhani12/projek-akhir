@@ -24,7 +24,7 @@ def layani_antrian():
         print(f"\n {nama} sedang di layani. (pesananan: {pesanan})")
         
 def customer():
-    print("selamat datang di resto pak memek")
+    print("selamat datang di resto pak budi")
     tambah_antrian()
 
 def menu():

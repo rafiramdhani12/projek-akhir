@@ -12,10 +12,12 @@ const Tabel = ({ headers = [], data = [], searchKeys = [], renderRow = () => [] 
 			// Handle nested properties (misal: "siswa.nama")
 			const keys = key.split(".");
 			let value = item;
+
 			for (const k of keys) {
 				value = value?.[k];
 				if (value === undefined) break;
 			}
+
 			return value?.toString().toLowerCase().includes(search.toLowerCase());
 		})
 	);
@@ -37,6 +39,7 @@ const Tabel = ({ headers = [], data = [], searchKeys = [], renderRow = () => [] 
 
 	return (
 		<main className="flex-grow container mt-4 mx-auto">
+
 			<div className="mb-4">
 				<input
 					type="text"
@@ -49,6 +52,7 @@ const Tabel = ({ headers = [], data = [], searchKeys = [], renderRow = () => [] 
 
 			<div className="overflow-x-auto">
 				<table className="table">
+
 					<thead>
 						<tr>
 							{headers.map((h, idx) => (
@@ -56,10 +60,13 @@ const Tabel = ({ headers = [], data = [], searchKeys = [], renderRow = () => [] 
 							))}
 						</tr>
 					</thead>
+
 					<tbody>{renderRow(currentData)}</tbody>
+
 				</table>
 
 				<div className="flex justify-center gap-2 mt-4">
+
 					{[...Array(totalPages)].map((_, i) => (
 						<button
 							key={i}
@@ -68,6 +75,7 @@ const Tabel = ({ headers = [], data = [], searchKeys = [], renderRow = () => [] 
 							{i + 1}
 						</button>
 					))}
+					
 				</div>
 			</div>
 		</main>

@@ -14,9 +14,11 @@ const History = () => {
 	return (
 		<>
 			<div className="container mx-auto px-4 py-8">
+
 				<button className="btn btn-error text-white" onClick={handleBack}>
 					back
 				</button>
+
 				<Tabel
 					headers={["No", "Nama", "Kelas", "Bulan", "Status", "Tahun", "Tanggal Bayar"]}
 					data={history}
@@ -35,6 +37,7 @@ const History = () => {
 						))
 					}
 				/>
+				
 			</div>
 		</>
 	);
