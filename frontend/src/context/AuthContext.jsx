@@ -1,34 +1,53 @@
-import React, { createContext, useContext, useState } from "react";
-
-// * dan disini ada context ini adalah fitur di react yg memudahkan kita untuk memanipulasi data global di aplikasi kita menghindarkan kita dari props drilling yg nanti akan menyulikkan pengembang untuk maintenance
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-	const [admin, setAdmin] = useState(() => {
-		const saved = localStorage.getItem("admin");
-		return saved ? JSON.parse(saved) : null;
-	});
+  // Gunakan useEffect untuk memastikan localStorage hanya diakses di client-side
+  const [authState, setAuthState] = useState({
+    name: "",
+    role: "",
+    token: ""
+  });
 
-	const [token, setToken] = useState(() => {
-		return localStorage.getItem("token") || null;
-	});
+  const [isHydrated,setIsHydrated] = useState(false) // tambahkan flag
 
-	const login = (adminData) => {
-		localStorage.setItem("token", adminData.token);
-		localStorage.setItem("admin", JSON.stringify(adminData.admin));
-		setToken(adminData.token);
-		setAdmin(adminData.admin);
-	};
+  // Inisialisasi state dari localStorage saat komponen mount
+  useEffect(() => {
+    const name = localStorage.getItem("name") || "";
+    const role = localStorage.getItem("role") || "";
+    const token = localStorage.getItem("token") || "";
+    setAuthState({ name, role, token });
+    setIsHydrated(true)
+  }, []);
 
-	const logout = () => {
-		localStorage.removeItem("token");
-		localStorage.removeItem("admin");
-		setToken(null);
-		setAdmin(null);
-	};
+  const login = ({ name, role, token }) => {
+    // Simpan ke state dan localStorage
+    setAuthState({ name, role, token });
+    localStorage.setItem("name", name);
+    localStorage.setItem("role", role);
+    localStorage.setItem("token", token);
+  };
 
-	return <AuthContext.Provider value={{ admin, token, login, logout }}>{children}</AuthContext.Provider>;
+  const logout = () => {
+    // Clear state dan localStorage
+    setAuthState({ name: "", role: "", token: "" });
+    localStorage.removeItem("name");
+    localStorage.removeItem("role");
+    localStorage.removeItem("token");
+  };
+
+  return (
+    <AuthContext.Provider value={{ ...authState, login, logout , isHydrated}}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};

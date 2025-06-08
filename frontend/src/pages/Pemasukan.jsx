@@ -1,41 +1,32 @@
-import React, { useState } from "react";
-import Form from "../components/Form";
-import { useData } from "../context/dataContext";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import Button from "../components/Button";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { DownloadPDF } from "../components/DownloadPDF";
+import { useData } from "../context/dataContext";
 
 const Pemasukan = () => {
-	const [formData, setFormData] = useState({
-		jumlah: "",
-	});
-
+	const [jumlah, setJumlah] = useState(null);
 	const [error, setError] = useState(null);
 	const { postPredict, pemasukan } = useData();
 
-	const handleChange = (e) => {
-		setFormData({
-			...formData,
-			[e.target.name]: e.target.value,
-		});
-	};
+	useEffect(() => {
+		const fetchAndPredict = async () => {
+			try {
+				// 1. Ambil semua data siswa dari backend Java
+				const res = await axios.get("http://localhost:8080/api/siswa");
+				const totalSiswa = res.data.length;
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		setError(null);
-
-		try {
-			// Validasi client-side
-			if (!formData.jumlah || isNaN(formData.jumlah)) {
-				throw new Error("Masukkan jumlah siswa yang valid");
+				setJumlah(totalSiswa); // simpan jumlah siswa
+				await postPredict(totalSiswa); // 2. Kirim ke Flask untuk prediksi
+			} catch (err) {
+				setError("Gagal mengambil data siswa atau prediksi");
+				console.error(err);
 			}
+		};
 
-			await postPredict(formData.jumlah);
-		} catch (error) {
-			setError(error.message);
-			console.error("Prediksi gagal:", error);
-		}
-	};
+		fetchAndPredict();
+	}, [postPredict]);
 
 	return (
 		<section className="container mx-auto p-4">
@@ -43,23 +34,11 @@ const Pemasukan = () => {
 
 			<h1 className="text-center text-2xl font-bold my-4">Prediksi Pemasukan Tahun Ajaran Baru</h1>
 
-			<Form title="Prediksi Pemasukan" onSubmit={handleSubmit} button="Prediksi">
-				<div className="mb-4">
-					<label className="block text-gray-700 mb-2" htmlFor="jumlah">
-						Jumlah Siswa
-					</label>
-					<input
-						type="number"
-						id="jumlah"
-						name="jumlah"
-						min="1"
-						value={formData.jumlah}
-						onChange={handleChange}
-						className="w-full px-3 py-2 border rounded-md"
-						required
-					/>
-				</div>
-			</Form>
+			{jumlah !== null && (
+				<p className="text-center text-lg mb-4">
+					Jumlah Siswa Saat Ini: <strong>{jumlah}</strong>
+				</p>
+			)}
 
 			{error && <div className="mt-4 p-4 bg-red-100 text-red-700 rounded-md">{error}</div>}
 
@@ -72,9 +51,9 @@ const Pemasukan = () => {
 					</div>
 
 					<PDFDownloadLink
-						document={<DownloadPDF jumlahSiswa={formData.jumlah} pemasukan={pemasukan} />}
+						document={<DownloadPDF jumlahSiswa={jumlah} pemasukan={pemasukan} />}
 						fileName="prediksi-pemasukan.pdf"
-						className="btn btn-primary">
+						className="btn btn-primary mt-4">
 						download pdf
 					</PDFDownloadLink>
 				</>

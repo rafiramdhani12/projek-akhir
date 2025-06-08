@@ -8,12 +8,14 @@ import { SiswaProvider } from "./context/SiswaContext.jsx";
 import { PembayaranProvider } from "./context/PembayaranSppContext.jsx";
 import { UtilProvider } from "./context/UtilContext.jsx";
 import { DataProvider } from "./context/dataContext.jsx";
+import { TuProvider } from "./context/TuContext.jsx";
 
 createRoot(document.getElementById("root")).render(
 	// * ini adalah awalan dari aplikasi tu sma App / pusatnya dibungkus oleh browser router auth siswa pembayaran util provider
 	<StrictMode>
 		<BrowserRouter>
 			<AuthProvider>
+				<TuProvider>
 				<SiswaProvider>
 					<PembayaranProvider>
 						<UtilProvider>
@@ -23,6 +25,7 @@ createRoot(document.getElementById("root")).render(
 						</UtilProvider>
 					</PembayaranProvider>
 				</SiswaProvider>
+				</TuProvider>
 			</AuthProvider>
 		</BrowserRouter>
 	</StrictMode>

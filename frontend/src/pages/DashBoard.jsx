@@ -4,15 +4,28 @@ import Tabel from "../components/Tabel";
 import { NavLink } from "react-router-dom";
 import { useSiswa } from "../context/SiswaContext";
 import { useUtil } from "../context/UtilContext";
+import { useAuth } from "../context/AuthContext";
 
 const DashBoard = () => {
 	const { siswa } = useSiswa();
 	const { rupiah, renderStatus, renderAction } = useUtil();
+	const { role} = useAuth();
 
 	return (
 		<div className="flex min-h-screen">
 			{/* Sidebar di kiri */}
-			<SideBar title={"Dashboard admin"}>
+			{role === "admin" ? (
+			<SideBar role={role} title={`Dashboard ${role}`}>
+				<NavLink to="/" className="flex items-center gap-3 hover:text-yellow-400">
+					<span>Home</span>
+				</NavLink>
+				<NavLink to="/dashboard/admin/daftar-tu" className="flex items-center gap-3 hover:text-yellow-400">
+					<span>daftar tu</span>
+				</NavLink>
+				
+			</SideBar>
+			) : (
+				<SideBar role={role} title={`Dashboard ${role}`}>
 				<NavLink to="/" className="flex items-center gap-3 hover:text-yellow-400">
 					<span>Home</span>
 				</NavLink>
@@ -29,12 +42,13 @@ const DashBoard = () => {
 					<span>pemasukan</span>
 				</NavLink>
 			</SideBar>
+			)}
 
 			{/* Tabel di kanan, isi halaman */}
 			<div className="flex-1 p-4">
 				<Tabel
 					headers={["No", "Nama", "Kelas", "NISN", "Balance", "Status", "Aksi"]}
-					data={siswa}
+					data={siswa}	
 					searchKeys={["nama", "kelas", "nisn"]}
 					renderRow={(currentData) =>
 						currentData.map((item, index) => (

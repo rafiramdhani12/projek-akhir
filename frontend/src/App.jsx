@@ -1,10 +1,4 @@
-/* eslint-disable no-unused-vars */
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-
 import { Routes, Route } from "react-router-dom";
-import { useFetchDataSiswa } from "./hooks/FetchDataSiswa";
-
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import PrivateRoute from "./secure/PrivateRoute";
@@ -17,7 +11,9 @@ import PendaftaranMurid from "./pages/PendaftaranMurid";
 import PembayaranSpp from "./pages/PembayaranSpp";
 import History from "./pages/History";
 import Pemasukan from "./pages/Pemasukan";
-import Test from "./pages/Test";
+
+import DaftarTu from "./pages/DaftarTu";
+import AddTu from "./pages/AddTu";
 
 function App() {
 	return (
@@ -48,7 +44,10 @@ function App() {
 					<Route path="/dashboard/admin/pembayaran/:id" element={<PembayaranSpp />} />
 					<Route path="/dashboard/admin/history-pembayaran" element={<History />} />
 					<Route path="/dashboard/admin/prediksi-pemasukan" element={<Pemasukan />} />
-					<Route path="/test" element={<Test />} />
+
+					<Route path="/dashboard/admin/daftar-tu" element={<DaftarTu />} />
+					<Route path="/dashboard/admin/tambah-tu" element={<AddTu />} />
+
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</LayoutPage>
