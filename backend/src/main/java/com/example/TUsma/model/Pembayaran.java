@@ -8,30 +8,30 @@ public class Pembayaran {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // ID unik untuk setiap entri pembayaran (auto-increment)
 
-    @ManyToOne
-    @JoinColumn(name = "siswa_id")
-    private Siswa siswa;
+    @ManyToOne // Relasi Many-to-One: banyak entri pembayaran bisa dimiliki oleh satu siswa
+    @JoinColumn(name = "siswa_id") // Kolom foreign key yang menghubungkan ke ID siswa di tabel Siswa
+    private Siswa siswa; // Objek referensi ke entitas Siswa yang melakukan pembayaran
 
-    private String bulan; // Contoh: "Januari"
-    private int tahun;
-    private int nominal;
+    private String bulan; // Bulan pembayaran, misalnya "Januari"
+    private int tahun; // Tahun pembayaran, misalnya 2025
+    private int nominal; // Nominal pembayaran dalam satuan rupiah
 
     @Enumerated(EnumType.STRING)
-    private StatusPembayaran status;
+    private StatusPembayaran status; // Status pembayaran (LUNAS atau BELUM_LUNAS)
 
-    private Date tanggalBayar;
+    private Date tanggalBayar; // Tanggal pembayaran dilakukan (format SQL date)
 
+    // Enum adalah tipe data khusus di Java yang memiliki nilai tetap (konstan)
+    // Dalam kasus ini, status pembayaran hanya bisa memiliki 2 nilai: LUNAS atau
+    // BELUM_LUNAS
     public enum StatusPembayaran {
         LUNAS,
         BELUM_LUNAS
     }
 
-  
-    // Getter & Setter 
-
-
+    // Getter & Setter
     public Long getId() {
         return id;
     }

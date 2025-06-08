@@ -23,12 +23,13 @@ const Login = () => {
       const res = await axios.post(`http://localhost:8080/api/${role}/login`, {
         name,
         password,
-      });
+      }); // nah jadi disini memang ada incosistence dari penulisan ada yg memakai useState ({}) ada juga yg nulis nya 1 1 tapi disini menjelaskan jika function res ini mengiriman method post pada endpoint api yg tertuju dan mengirimkan value nama dan password nah dibagian role nya itu dibuat dinamis tapi set default nya adalah admin karena endopoint api nya itu ada 2 daripada render 2 kali mending dijadiin dinamis seperti ini
 
       console.log("Full response:", res); // Debugging
       console.log("Response data:", res.data); // Debugging
 
       const data = res.data;
+      // nah jadi disetiap api itu memang sering ada .data itu artinyan untuk mengakases datanya jika nested bisa res.data.addres yg dmn addres misalnya ada country ada city dan juga bisa digunakan untuk mengakses langsung res.data.nama dan dmn nama ini tunggal dan pada kasus ini res.data mengambil semua data nya (kulit luar)
 
       // Validasi response minimum
       if (!data || !data.token) {
@@ -57,9 +58,7 @@ const Login = () => {
         response: err.response,
       }); // Debugging lengkap
       
-      const errorMessage = err.response?.data?.message || 
-                         err.message || 
-                         "Terjadi kesalahan saat login";
+      const errorMessage = err.response?.data?.message || err.message || "Terjadi kesalahan saat login";
       setError(errorMessage);
     } finally {
       setIsLoading(false);
@@ -73,6 +72,7 @@ const Login = () => {
       error={error} 
       button={isLoading ? "Memproses..." : "Login"}
       disabled={isLoading}
+      className={"success"}
     >
       <div className="mb-4">
         <label htmlFor="role" className="block text-gray-700 mb-2">Login sebagai</label>

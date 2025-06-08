@@ -1,17 +1,26 @@
 import axios from "axios";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useSiswa } from "./SiswaContext";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "./AuthContext";
+import { useReactToPrint } from "react-to-print";
 
 const UtilContext = createContext();
 
 export const UtilProvider = ({ children }) => {
+	const { tambahSiswa } = useSiswa();
 	const { fetcDataSiswa } = useSiswa();
 	const {token , role} = useAuth();
 	const [paymentItems,setPaymentItems] = useState([])
 	const [formOption , setFormOption] = useState({title:"" , value: 0})
 	const [loading , setLoading] = useState(true)
+	const [formData, setFormData] = useState({ nama: "", kelas: "", nisn: "", balance: 0 });
+	const [selectedClass, setSelectedClass] = useState([]);
+	const [error, setError] = useState("");
+	const [selectedPayments, setSelectedPayments] = useState([]);
+	
+	const contentRef = useRef();
+	const printBill = useReactToPrint({ contentRef});
 
 	const fetchPaymentItems = async () => {
     try {
@@ -79,11 +88,9 @@ export const UtilProvider = ({ children }) => {
 		}if(role === "admin"){
 			return(
 		<>
-			{item.balance < 2500000 && (
-				<NavLink to={`/dashboard/admin/pelunasan/${item.id}`} className="btn btn-success btn-sm text-white mr-2">
+				<NavLink to={`/dashboard/admin/edit-siswa/${item.id}`} className="btn btn-success btn-sm text-white mr-2">
 					edit
 				</NavLink>
-			)}
 			<button onClick={() => handleDelete(item.id)} className="btn btn-error btn-sm text-white">
 				Hapus Murid
 			</button>
@@ -93,7 +100,32 @@ export const UtilProvider = ({ children }) => {
 		return null
 	};
 
-	return <UtilContext.Provider value={{ rupiah, renderStatus, renderAction , paymentItems,loading,addPaymentItems , formOption , setFormOption , fetchPaymentItems}}>{children}</UtilContext.Provider>;
+	const handleSubmit = async () => {
+    if (formData.balance > 2500000) {
+      setError("Balance tidak boleh lebih dari 2.500.000");
+      return;
+    }
+
+    console.log("Submit data:", formData);
+    console.log("Selected payments:", selectedPayments);
+
+    try {
+      await tambahSiswa(formData);
+      setFormData({ nama: "", kelas: "", nisn: "", balance: 0 });
+      setSelectedPayments([]);
+      setSelectedClass([]);
+    } catch (err) {
+      alert(`Gagal menambahkan siswa: ${err}`);
+    }
+  };
+
+	const handleSubmitAndPrint = async () => {
+    await handleSubmit();
+    printBill();
+  	};
+
+	
+	return <UtilContext.Provider value={{ rupiah, renderStatus, renderAction , paymentItems,loading,addPaymentItems , formOption , setFormOption , fetchPaymentItems , handleSubmitAndPrint , selectedClass ,error , contentRef , printBill , formData,setFormData , setError , selectedPayments , setSelectedPayments , setSelectedClass ,  }}>{children}</UtilContext.Provider>;
 };
 
 export const useUtil = () => useContext(UtilContext);

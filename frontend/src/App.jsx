@@ -14,14 +14,16 @@ import Pemasukan from "./pages/Pemasukan";
 
 import DaftarTu from "./pages/DaftarTu";
 import AddTu from "./pages/AddTu";
+import EditSiswa from "./pages/EditSiswa";
+import EditTu from "./pages/EditTu";
 
 function App() {
 	return (
 		<>
 			<LayoutPage>
-				{/* Konten Utama */}
 				<Routes>
 					<Route path="/" element={<Home />} />
+
 					<Route
 						path="/dashboard/admin"
 						element={
@@ -30,6 +32,7 @@ function App() {
 							</PrivateRoute>
 						}
 					/>
+
 					<Route
 						path="/dashboard/admin/pendaftaran-murid-baru"
 						element={
@@ -38,6 +41,7 @@ function App() {
 							</PrivateRoute>
 						}
 					/>
+
 					<Route path="/login" element={<Login />} />
 					<Route path="/dashboard/admin/pelunasan/:id" element={<Pelunasan />} />
 					<Route path="/dashboard/admin/bayar-spp" element={<Spp />} />
@@ -47,7 +51,6 @@ function App() {
 
 					<Route path="/dashboard/admin/daftar-tu" element={<DaftarTu />} />
 					<Route path="/dashboard/admin/tambah-tu" element={<AddTu />} />
-
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</LayoutPage>

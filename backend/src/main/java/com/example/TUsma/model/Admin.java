@@ -1,11 +1,14 @@
 package com.example.TUsma.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
-@Entity
+@Entity // library dari jakarta persistance untuk membuat table di database entity itu mewakilkan tabel di database
 public class Admin {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // generate id automatis 
     private Long id;
     private String name;
     private String address;

@@ -1,5 +1,3 @@
-import React from "react";
-
 const CheckBox = ({ title, value, checked, onChange }) => {
 	return (
 		<div className="form-control">

@@ -46,12 +46,25 @@
                     }
                 })
                 setTataUsaha((prev) => [...prev, res.data]) // refresh data setelah tambah
-               
+        
             } catch (error) {
                 console.error(error)
                 throw error
             }
         }
+const editTu = async (id) => {
+  try {
+    await axios.patch(`http://localhost:8080/api/tata-usaha/edit/${id}`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    await fetchDataTu(); // optional: refresh data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 
         const hapusTu = async (id) => {
             try {
@@ -67,7 +80,7 @@
         },[fetchDataTu])
 
         return(
-            <TuContext.Provider value={{tataUsaha , tambahTu , hapusTu , fetchDataTu , setFormData , formData}} >
+            <TuContext.Provider value={{tataUsaha , tambahTu , hapusTu , fetchDataTu , setFormData , formData ,editTu}} >
                 {children}
             </TuContext.Provider>
         )

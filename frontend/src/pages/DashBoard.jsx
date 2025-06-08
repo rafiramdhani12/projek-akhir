@@ -9,7 +9,8 @@ import { useAuth } from "../context/AuthContext";
 const DashBoard = () => {
 	const { siswa } = useSiswa();
 	const { rupiah, renderStatus, renderAction } = useUtil();
-	const { role} = useAuth();
+	console.log(siswa)
+	const { role , name} = useAuth();
 
 	return (
 		<div className="flex min-h-screen">
@@ -46,6 +47,7 @@ const DashBoard = () => {
 
 			{/* Tabel di kanan, isi halaman */}
 			<div className="flex-1 p-4">
+				<h1>role {role} : nama : {name}</h1>
 				<Tabel
 					headers={["No", "Nama", "Kelas", "NISN", "Balance", "Status", "Aksi"]}
 					data={siswa}	
