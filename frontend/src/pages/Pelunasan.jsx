@@ -6,7 +6,7 @@ import Button from "../components/Button";
 const Pelunasan = () => {
 	const { id } = useParams(); // ambil dari id dari url
 	const navigate = useNavigate();
-	const { siswa, pelunasan, error } = useSiswa();
+	const { siswa, pelunasan } = useSiswa();
 
 	const selectedSiswa = siswa.find((s) => String(s.id) === String(id)); //* method find ((e) => element (logika) (yg ingin di cari))
 
@@ -34,13 +34,15 @@ const Pelunasan = () => {
 		}
 	};
 
-	
-
 	return (
 		<>
 			<div>
 				<div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md mb-10 mt-10">
-					<Button className={"btn btn-error text-white p-5 mb-5"} onClick={() => window.history.back()} content={"back"} />
+					<Button
+						className={"btn btn-error text-white p-5 mb-5"}
+						onClick={() => window.history.back()}
+						content={"back"}
+					/>
 					<h2 className="text-xl font-semibold mb-4">Pelunasan Siswa</h2>
 					<h1 className="text-lg font-semibold mb-4">{selectedSiswa?.nama}</h1>
 					<form onSubmit={handleUpdate}>
@@ -56,7 +58,7 @@ const Pelunasan = () => {
 								onChange={(e) => setBalance(e.target.value)}
 								onScroll={(e) => e.target.blur()}
 								onKeyDown={(e) => {
-									if(e.key === "ArrowUp" || e.key === "ArrowDown"){
+									if (e.key === "ArrowUp" || e.key === "ArrowDown") {
 										e.preventDefault();
 									}
 								}}
@@ -70,7 +72,6 @@ const Pelunasan = () => {
 							className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
 							lunas
 						</button>
-						{error && <p className="text-red-500 mt-2">{error}</p>}
 					</form>
 				</div>
 			</div>

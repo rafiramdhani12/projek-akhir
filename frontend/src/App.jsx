@@ -16,8 +16,11 @@ import DaftarTu from "./pages/DaftarTu";
 import AddTu from "./pages/AddTu";
 import EditSiswa from "./pages/EditSiswa";
 import EditTu from "./pages/EditTu";
+import { useAuth } from "./context/AuthContext";
 
 function App() {
+	const { role } = useAuth();
+
 	return (
 		<>
 			<LayoutPage>
@@ -25,7 +28,7 @@ function App() {
 					<Route path="/" element={<Home />} />
 
 					<Route
-						path="/dashboard/admin"
+						path={`/dashboard/${role}`}
 						element={
 							<PrivateRoute>
 								<DashBoard />
@@ -34,7 +37,7 @@ function App() {
 					/>
 
 					<Route
-						path="/dashboard/admin/pendaftaran-murid-baru"
+						path={`/dashboard/${role}/pendaftaran-murid-baru`}
 						element={
 							<PrivateRoute>
 								<PendaftaranMurid />
@@ -43,14 +46,16 @@ function App() {
 					/>
 
 					<Route path="/login" element={<Login />} />
-					<Route path="/dashboard/admin/pelunasan/:id" element={<Pelunasan />} />
-					<Route path="/dashboard/admin/bayar-spp" element={<Spp />} />
-					<Route path="/dashboard/admin/pembayaran/:id" element={<PembayaranSpp />} />
-					<Route path="/dashboard/admin/history-pembayaran" element={<History />} />
-					<Route path="/dashboard/admin/prediksi-pemasukan" element={<Pemasukan />} />
+					<Route path={`/dashboard/${role}/pelunasan/:id`} element={<Pelunasan />} />
+					<Route path={`/dashboard/${role}/bayar-spp`} element={<Spp />} />
+					<Route path={`/dashboard/${role}/pembayaran/:id`} element={<PembayaranSpp />} />
+					<Route path={`/dashboard/${role}/history-pembayaran`} element={<History />} />
+					<Route path={`/dashboard/${role}/prediksi-pemasukan`} element={<Pemasukan />} />
 
-					<Route path="/dashboard/admin/daftar-tu" element={<DaftarTu />} />
-					<Route path="/dashboard/admin/tambah-tu" element={<AddTu />} />
+					<Route path={`/dashboard/${role}/daftar-tu`} element={<DaftarTu />} />
+					<Route path={`/dashboard/${role}/tambah-tu`} element={<AddTu />} />
+					<Route path={`/dashboard/${role}/edit-tata-usaha/:id`} element={<EditTu />} />
+					<Route path={`/dashboard/${role}/edit-siswa/:id`} element={<EditSiswa />} />
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</LayoutPage>
