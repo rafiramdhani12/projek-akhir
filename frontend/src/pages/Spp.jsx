@@ -42,16 +42,15 @@ const Spp = () => {
 	const filteredSiswa = selectedClass === "all" ? siswa : siswa.filter((s) => s.kelas === selectedClass);
 	// jika selectedClass value nya all maka akan merender semua siswa jika tidak maka hanya yg di filter saja yg di render
 
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 
 	const handleBack = () => {
-		navigate("/dashboard/admin")
-	}
+		navigate("/dashboard/tata-usaha");
+	};
 
 	return (
 		<>
 			<div className="overflow-x-auto ml-5">
-
 				<div className="flex justify-end mt-5">
 					<select className="select select-bordered" value={selectedClass} onChange={handleChange}>
 						<option value="all">Semua Kelas</option>
@@ -66,7 +65,6 @@ const Spp = () => {
 				<div className="mb-4">
 					<Button className={"btn btn-error text-white "} content={"back"} onClick={handleBack} />
 				</div>
-
 
 				<table className="table">
 					<thead>
@@ -92,8 +90,6 @@ const Spp = () => {
 						))}
 					</tbody>
 				</table>
-
-
 			</div>
 		</>
 	);

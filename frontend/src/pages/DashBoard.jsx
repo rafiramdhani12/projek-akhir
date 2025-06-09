@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SideBar from "../components/SideBar";
 import Tabel from "../components/Tabel";
 import { NavLink } from "react-router-dom";
@@ -7,10 +7,14 @@ import { useUtil } from "../context/UtilContext";
 import { useAuth } from "../context/AuthContext";
 
 const DashBoard = () => {
-	const { siswa } = useSiswa();
+	const { siswa, fetchDataSiswa } = useSiswa();
 	const { rupiah, renderStatus, renderAction } = useUtil();
 	console.log(siswa);
 	const { role, name } = useAuth();
+
+	useEffect(() => {
+		fetchDataSiswa();
+	}, [fetchDataSiswa]);
 
 	return (
 		<div className="flex min-h-screen">
@@ -30,17 +34,21 @@ const DashBoard = () => {
 						<span>Home</span>
 					</NavLink>
 					<NavLink
-						to="/dashboard/admin/pendaftaran-murid-baru"
+						to={`/dashboard/tata-usaha/pendaftaran-murid-baru`}
 						className="flex items-center gap-3 hover:text-yellow-400">
 						<span>pendaftaran murid baru</span>
 					</NavLink>
-					<NavLink to="/dashboard/admin/bayar-spp" className="flex items-center gap-3 hover:text-yellow-400">
+					<NavLink to={`/dashboard/tata-usaha/bayar-spp`} className="flex items-center gap-3 hover:text-yellow-400">
 						<span>Bayar Spp</span>
 					</NavLink>
-					<NavLink to="/dashboard/admin/history-pembayaran" className="flex items-center gap-3 hover:text-yellow-400">
+					<NavLink
+						to="/dashboard/tata-usaha/history-pembayaran"
+						className="flex items-center gap-3 hover:text-yellow-400">
 						<span>History Pembayaran</span>
 					</NavLink>
-					<NavLink to="/dashboard/admin/prediksi-pemasukan" className="flex items-center gap-3 hover:text-yellow-400">
+					<NavLink
+						to="/dashboard/tata-usaha/prediksi-pemasukan"
+						className="flex items-center gap-3 hover:text-yellow-400">
 						<span>pemasukan</span>
 					</NavLink>
 				</SideBar>

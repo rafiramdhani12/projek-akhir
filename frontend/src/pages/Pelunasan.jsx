@@ -28,7 +28,7 @@ const Pelunasan = () => {
 		};
 		try {
 			await pelunasan(updateData);
-			navigate("/dashboard/admin");
+			navigate("/dashboard/tata-usaha");
 		} catch (err) {
 			console.error(`gagal update siswa : ${err}`);
 		}
@@ -40,7 +40,7 @@ const Pelunasan = () => {
 				<div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md mb-10 mt-10">
 					<Button
 						className={"btn btn-error text-white p-5 mb-5"}
-						onClick={() => window.history.back()}
+						onClick={() => navigate("/dashboard/tata-usaha")}
 						content={"back"}
 					/>
 					<h2 className="text-xl font-semibold mb-4">Pelunasan Siswa</h2>

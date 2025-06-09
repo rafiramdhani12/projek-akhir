@@ -13,7 +13,7 @@ export const SiswaProvider = ({ children }) => {
 
 	const navigate = useNavigate();
 
-	const fetcDataSiswa = useCallback(async () => {
+	const fetchDataSiswa = useCallback(async () => {
 		try {
 			setLoading(true);
 			const res = await axios.get("http://localhost:8080/api/siswa", {
@@ -38,7 +38,7 @@ export const SiswaProvider = ({ children }) => {
 				},
 			});
 			setSiswa((prev) => [...prev, res.data]); // refresh data setelah tambah
-			navigate("/dashboard/admin");
+			navigate("/dashboard/tata-usaha");
 		} catch (err) {
 			console.error(`gagal menambahkan siswa : ${err}`);
 			throw err;
@@ -54,7 +54,7 @@ export const SiswaProvider = ({ children }) => {
 			});
 			// update data siswa yg ada di state, bukan menambah
 			setSiswa((prev) => prev.map((siswa) => (siswa.id === formData.id ? res.data : siswa)));
-			navigate("/dashboard");
+			navigate("/dashboard/tata-usaha");
 		} catch (error) {
 			console.error(`gagal update siswa : ${error}`);
 			throw error;
@@ -63,11 +63,11 @@ export const SiswaProvider = ({ children }) => {
 
 	// fetch data pada saat pertama kali load
 	useEffect(() => {
-		fetcDataSiswa();
-	}, [fetcDataSiswa]);
+		fetchDataSiswa();
+	}, [fetchDataSiswa]);
 
 	return (
-		<SiswaContext.Provider value={{ siswa, tambahSiswa, loading, error, fetcDataSiswa, pelunasan }}>
+		<SiswaContext.Provider value={{ siswa, tambahSiswa, loading, error, fetchDataSiswa, pelunasan }}>
 			{children}
 		</SiswaContext.Provider>
 	);

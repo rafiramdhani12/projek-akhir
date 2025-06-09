@@ -37,7 +37,7 @@ function App() {
 					/>
 
 					<Route
-						path={`/dashboard/${role}/pendaftaran-murid-baru`}
+						path={`/dashboard/tata-usaha/pendaftaran-murid-baru`}
 						element={
 							<PrivateRoute>
 								<PendaftaranMurid />
@@ -46,16 +46,16 @@ function App() {
 					/>
 
 					<Route path="/login" element={<Login />} />
-					<Route path={`/dashboard/${role}/pelunasan/:id`} element={<Pelunasan />} />
-					<Route path={`/dashboard/${role}/bayar-spp`} element={<Spp />} />
-					<Route path={`/dashboard/${role}/pembayaran/:id`} element={<PembayaranSpp />} />
-					<Route path={`/dashboard/${role}/history-pembayaran`} element={<History />} />
-					<Route path={`/dashboard/${role}/prediksi-pemasukan`} element={<Pemasukan />} />
+					<Route path={`/dashboard/tata-usaha/pelunasan/:id`} element={<Pelunasan />} />
+					<Route path={`/dashboard/tata-usaha/bayar-spp`} element={<Spp />} />
+					<Route path={`/dashboard/tata-usaha/pembayaran/:id`} element={<PembayaranSpp />} />
+					<Route path={`/dashboard/tata-usaha/history-pembayaran`} element={<History />} />
+					<Route path={`/dashboard/tata-usaha/prediksi-pemasukan`} element={<Pemasukan />} />
 
-					<Route path={`/dashboard/${role}/daftar-tu`} element={<DaftarTu />} />
-					<Route path={`/dashboard/${role}/tambah-tu`} element={<AddTu />} />
-					<Route path={`/dashboard/${role}/edit-tata-usaha/:id`} element={<EditTu />} />
-					<Route path={`/dashboard/${role}/edit-siswa/:id`} element={<EditSiswa />} />
+					<Route path={`/dashboard/admin/daftar-tu`} element={<DaftarTu />} />
+					<Route path={`/dashboard/admin/tambah-tu`} element={<AddTu />} />
+					<Route path={`/dashboard/admin/edit-tata-usaha/:id`} element={<EditTu />} />
+					<Route path={`/dashboard/admin/edit-siswa/:id`} element={<EditSiswa />} />
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</LayoutPage>

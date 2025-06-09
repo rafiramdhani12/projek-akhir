@@ -4,17 +4,16 @@ import { usePembayaran } from "../context/PembayaranSppContext";
 
 const History = () => {
 	const { history } = usePembayaran();
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 	console.info(history);
 
 	const handleBack = () => {
-		navigate("/dashboard/admin")
-	}
+		navigate("/dashboard/tata-usaha");
+	};
 
 	return (
 		<>
 			<div className="container mx-auto px-4 py-8">
-
 				<button className="btn btn-error text-white" onClick={handleBack}>
 					back
 				</button>
@@ -37,7 +36,6 @@ const History = () => {
 						))
 					}
 				/>
-				
 			</div>
 		</>
 	);

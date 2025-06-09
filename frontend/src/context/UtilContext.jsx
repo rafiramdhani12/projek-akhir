@@ -10,46 +10,46 @@ const UtilContext = createContext();
 export const UtilProvider = ({ children }) => {
 	const { tambahSiswa } = useSiswa();
 	const { fetcDataSiswa } = useSiswa();
-	const {token , role} = useAuth();
-	const [paymentItems,setPaymentItems] = useState([])
-	const [formOption , setFormOption] = useState({title:"" , value: 0})
-	const [loading , setLoading] = useState(true)
+	const { token, role } = useAuth();
+	const [paymentItems, setPaymentItems] = useState([]);
+	const [formOption, setFormOption] = useState({ title: "", value: 0 });
+	const [loading, setLoading] = useState(true);
 	const [formData, setFormData] = useState({ nama: "", kelas: "", nisn: "", balance: 0 });
 	const [selectedClass, setSelectedClass] = useState([]);
 	const [error, setError] = useState("");
 	const [selectedPayments, setSelectedPayments] = useState([]);
-	
+
 	const contentRef = useRef();
-	const printBill = useReactToPrint({ contentRef});
+	const printBill = useReactToPrint({ contentRef });
 
 	const fetchPaymentItems = async () => {
-    try {
-      const res = await axios.get("http://localhost:8080/api/payment-items");
-      setPaymentItems(res.data);
-    } catch (error) {
-      console.error("Gagal mengambil data payment items:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+		try {
+			const res = await axios.get("http://localhost:8080/api/payment-items");
+			setPaymentItems(res.data);
+		} catch (error) {
+			console.error("Gagal mengambil data payment items:", error);
+		} finally {
+			setLoading(false);
+		}
+	};
 
-  const addPaymentItems = async () => {
-    try {
-      await axios.post(
-        "http://localhost:8080/api/payment-items",
-        { title: formOption.title, value: formOption.value },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setFormOption({ title: "", value: 0 });
-      fetchPaymentItems();
-    } catch (error) {
-      console.log("Gagal menambah item pembayaran:", error);
-    }
-  };
+	const addPaymentItems = async () => {
+		try {
+			await axios.post(
+				"http://localhost:8080/api/payment-items",
+				{ title: formOption.title, value: formOption.value },
+				{ headers: { Authorization: `Bearer ${token}` } }
+			);
+			setFormOption({ title: "", value: 0 });
+			fetchPaymentItems();
+		} catch (error) {
+			console.log("Gagal menambah item pembayaran:", error);
+		}
+	};
 
-  useEffect(() => {
-    fetchPaymentItems();
-  }, []);
+	useEffect(() => {
+		fetchPaymentItems();
+	}, []);
 
 	const rupiah = (value) =>
 		new Intl.NumberFormat("id-ID", {
@@ -74,58 +74,85 @@ export const UtilProvider = ({ children }) => {
 		);
 
 	const renderAction = (item) => {
-		if(role === "tata-usaha"){
-			return(
-		<>
-			{item.balance < 2500000 && (
-				<NavLink to={`/dashboard/admin/pelunasan/${item.id}`} className="btn btn-success btn-sm text-white mr-2">
-					Pelunasan
-				</NavLink>
-			)}
-			
-		</>
-			)
-		}if(role === "admin"){
-			return(
-		<>
-				<NavLink to={`/dashboard/admin/edit-siswa/${item.id}`} className="btn btn-success btn-sm text-white mr-2">
-					edit
-				</NavLink>
-			<button onClick={() => handleDelete(item.id)} className="btn btn-error btn-sm text-white">
-				Hapus Murid
-			</button>
-		</>
-			)
+		if (role === "tata-usaha") {
+			return (
+				<>
+					{item.balance < 2500000 && (
+						<NavLink
+							to={`/dashboard/tata-usaha/pelunasan/${item.id}`}
+							className="btn btn-success btn-sm text-white mr-2">
+							Pelunasan
+						</NavLink>
+					)}
+				</>
+			);
 		}
-		return null
+		if (role === "admin") {
+			return (
+				<>
+					<NavLink to={`/dashboard/admin/edit-siswa/${item.id}`} className="btn btn-success btn-sm text-white mr-2">
+						edit
+					</NavLink>
+					<button onClick={() => handleDelete(item.id)} className="btn btn-error btn-sm text-white">
+						Hapus Murid
+					</button>
+				</>
+			);
+		}
+		return null;
 	};
 
 	const handleSubmit = async () => {
-    if (formData.balance > 2500000) {
-      setError("Balance tidak boleh lebih dari 2.500.000");
-      return;
-    }
+		if (formData.balance > 2500000) {
+			setError("Balance tidak boleh lebih dari 2.500.000");
+			return;
+		}
 
-    console.log("Submit data:", formData);
-    console.log("Selected payments:", selectedPayments);
+		console.log("Submit data:", formData);
+		console.log("Selected payments:", selectedPayments);
 
-    try {
-      await tambahSiswa(formData);
-      setFormData({ nama: "", kelas: "", nisn: "", balance: 0 });
-      setSelectedPayments([]);
-      setSelectedClass([]);
-    } catch (err) {
-      alert(`Gagal menambahkan siswa: ${err}`);
-    }
-  };
+		try {
+			await tambahSiswa(formData);
+			setFormData({ nama: "", kelas: "", nisn: "", balance: 0 });
+			setSelectedPayments([]);
+			setSelectedClass([]);
+		} catch (err) {
+			alert(`Gagal menambahkan siswa: ${err}`);
+		}
+	};
 
 	const handleSubmitAndPrint = async () => {
-    await handleSubmit();
-    printBill();
-  	};
+		await handleSubmit();
+		printBill();
+	};
 
-	
-	return <UtilContext.Provider value={{ rupiah, renderStatus, renderAction , paymentItems,loading,addPaymentItems , formOption , setFormOption , fetchPaymentItems , handleSubmitAndPrint , selectedClass ,error , contentRef , printBill , formData,setFormData , setError , selectedPayments , setSelectedPayments , setSelectedClass ,  }}>{children}</UtilContext.Provider>;
+	return (
+		<UtilContext.Provider
+			value={{
+				rupiah,
+				renderStatus,
+				renderAction,
+				paymentItems,
+				loading,
+				addPaymentItems,
+				formOption,
+				setFormOption,
+				fetchPaymentItems,
+				handleSubmitAndPrint,
+				selectedClass,
+				error,
+				contentRef,
+				printBill,
+				formData,
+				setFormData,
+				setError,
+				selectedPayments,
+				setSelectedPayments,
+				setSelectedClass,
+			}}>
+			{children}
+		</UtilContext.Provider>
+	);
 };
 
 export const useUtil = () => useContext(UtilContext);
