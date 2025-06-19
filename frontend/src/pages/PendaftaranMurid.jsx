@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Form from "../components/Form";
 import CheckBox from "../components/CheckBox";
 import Button from "../components/Button";
-import CetakPembayaran from "./CetakPembayaran";
+
 import { useUtil } from "../context/UtilContext";
 import { useNavigate, useParams } from "react-router-dom";
+import Modal from "../components/Modal";
+import CetakPembayaran from "../components/CetakPembayaran";
 
 const PendaftaranMurid = () => {
 	const { id } = useParams();
@@ -27,11 +28,13 @@ const PendaftaranMurid = () => {
 		setSelectedPayments,
 		selectedClass,
 		setSelectedClass,
+		editPaymentItems,
 	} = useUtil();
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isAddPaymentModalOpen, setIsAddPaymentModalOpen] = useState(false);
 	const [isEditPaymentModalOpen, setIsEditPaymentOpen] = useState(false);
+	const [isPayModalOpen, setIsPayModalOpen] = useState(false);
 	const [editId, setEditId] = useState(null);
 
 	const dataPayment = paymentItems.find((s) => s.id === parseInt(id));
@@ -46,6 +49,10 @@ const PendaftaranMurid = () => {
 		}
 	}, [dataPayment]);
 	// ini adalah useEffect yg guna nya untuk memantau state yg diubah dengan alur jika dataPayment ada nilainya maka setFormOption yg mengandung title dan value dan dirender dengan depedency [] yg maksudnya dirender setiap state payment item nya berubah
+
+	useEffect(() => {
+		fetchPaymentItems();
+	}, [fetchPaymentItems]);
 
 	const classOptions = [
 		{ id: 1, title: "10 IPA 1" },
@@ -111,35 +118,15 @@ const PendaftaranMurid = () => {
 		setError("");
 	};
 
-	const handleDelete = async (id) => {
-		try {
-			await axios.delete(`http://localhost:8080/api/payment-items/${id}`);
-			await fetchPaymentItems();
-		} catch (err) {
-			console.log(err);
-		}
-	};
-
 	return (
 		<>
 			<Form title="Pendaftaran Murid Baru" onSubmit={(e) => e.preventDefault()} error={error} button={null}>
-				<Button
-					className="btn btn-error text-white rounded-lg mb-4"
-					onClick={() => navigate("/dashboard/tata-usaha")}
-					content="Back"
-				/>
+				<Button className="btn btn-error text-white rounded-lg mb-4" onClick={() => navigate("/dashboard/tata-usaha")} content="Back" />
 
 				{/* Nama */}
 				<div className="mb-4">
 					<label className="block text-gray-700 mb-2">Nama Lengkap</label>
-					<input
-						type="text"
-						name="nama"
-						value={formData.nama}
-						onChange={handleChange}
-						className="w-full px-3 py-2 border rounded-md"
-						required
-					/>
+					<input type="text" name="nama" value={formData.nama} onChange={handleChange} className="w-full px-3 py-2 border rounded-md" required />
 				</div>
 
 				{/* Kelas */}
@@ -160,14 +147,7 @@ const PendaftaranMurid = () => {
 				{/* NISN */}
 				<div className="mb-4">
 					<label className="block text-gray-700 mb-2">NISN</label>
-					<input
-						type="text"
-						name="nisn"
-						value={formData.nisn}
-						onChange={handleChange}
-						className="w-full px-3 py-2 border rounded-md"
-						required
-					/>
+					<input type="text" name="nisn" value={formData.nisn} onChange={handleChange} className="w-full px-3 py-2 border rounded-md" required />
 				</div>
 
 				<Button type="button" className="btn btn-primary mb-3" content="Option" onClick={() => setIsModalOpen(true)} />
@@ -191,9 +171,7 @@ const PendaftaranMurid = () => {
 
 				{/* Balance */}
 				<div className="mb-4">
-					<label className="block text-gray-700 mb-2">
-						Uang Daftar (Total: Rp {formData.balance.toLocaleString("id-ID")})
-					</label>
+					<label className="block text-gray-700 mb-2">Uang Daftar (Total: Rp {formData.balance.toLocaleString("id-ID")})</label>
 					<input
 						type="number"
 						name="balance"
@@ -204,24 +182,30 @@ const PendaftaranMurid = () => {
 					/>
 				</div>
 
-				<Button className="btn btn-success p-2" content="Cetak dan Bayar" onClick={handleSubmitAndPrint} />
+				<Button className="btn btn-success p-2" content="konfirmasi" onClick={() => setIsPayModalOpen(true)} />
+				{isPayModalOpen && (
+					<>
+						<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ">
+							<div className="bg-white rounded-lg p-6 w-full max-w-md">
+								<h1>nama : {formData.nama}</h1>
+								<h1>kelas : {formData.kelas}</h1>
+								<h1>nisn : {formData.nisn}</h1>
+								<h1>uang daftar : {formData.balance}</h1>
+								<Button className="success" content="Cetak dan Bayar" onClick={handleSubmitAndPrint} />
+								<Button className="error" content="Batal" onClick={() => setIsPayModalOpen(false)} />
+							</div>
+						</div>
+					</>
+				)}
 			</Form>
 
 			{/* Modal Options */}
 			{isModalOpen && (
 				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
 					<div className="bg-white rounded-lg p-6 w-full max-w-2xl">
-						<Button
-							onClick={() => setIsModalOpen(false)}
-							className="btn btn-error text-white p-2 mb-4"
-							content="Tutup"
-						/>
+						<Button onClick={() => setIsModalOpen(false)} className="btn btn-error text-white p-2 mb-4" content="Tutup" />
 						<h2 className="text-xl font-bold mb-4">Opsi Tambahan</h2>
-						<Button
-							onClick={() => setIsAddPaymentModalOpen(true)}
-							className="btn btn-primary p-2 mb-4"
-							content="Tambah Payment Item"
-						/>
+						<Button onClick={() => setIsAddPaymentModalOpen(true)} className="btn btn-primary p-2 mb-4" content="Tambah Payment Item" />
 						<div className="overflow-x-auto">
 							<table className="table w-full">
 								<thead>
@@ -249,11 +233,6 @@ const PendaftaranMurid = () => {
 															setEditId(item.id);
 														}}
 													/>
-													<Button
-														className="btn btn-error p-2 text-white"
-														content="Delete"
-														onClick={() => handleDelete(item.id)}
-													/>
 												</div>
 											</td>
 										</tr>
@@ -265,100 +244,48 @@ const PendaftaranMurid = () => {
 				</div>
 			)}
 
-			{/* Modal Tambah Payment */}
 			{isAddPaymentModalOpen && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-					<div className="bg-white rounded-lg p-6 w-full max-w-md">
-						<Button
-							onClick={() => setIsAddPaymentModalOpen(false)}
-							className="btn btn-error text-white p-2 mb-4"
-							content="Tutup"
-						/>
-						<h2 className="text-lg font-bold mb-4">Tambah Payment Item</h2>
-						<div className="mb-4">
-							<label className="block text-gray-700 mb-1">Judul Pembayaran</label>
-							<input
-								type="text"
-								name="title"
-								value={formOption.title}
-								onChange={(e) => setFormOption({ ...formOption, [e.target.name]: e.target.value })}
-								className="w-full px-3 py-2 border rounded-md"
-							/>
-						</div>
-						<div className="mb-4">
-							<label className="block text-gray-700 mb-1">Nominal</label>
-							<input
-								type="number"
-								name="value"
-								value={formOption.value}
-								onChange={(e) => setFormOption({ ...formOption, [e.target.name]: Number(e.target.value) })}
-								className="w-full px-3 py-2 border rounded-md"
-							/>
-						</div>
-						<Button
-							className="btn btn-success p-2"
-							content="Simpan"
-							onClick={async () => {
-								await addPaymentItems();
-								setIsAddPaymentModalOpen(false);
-							}}
-						/>
-					</div>
-				</div>
+				<Modal
+					title={"Tambah Payment Item"}
+					label={"Judul Pembayaran"}
+					nominal={"Nominal"}
+					state={formOption}
+					setState={setIsAddPaymentModalOpen}
+					setForm={setFormOption}
+					util={addPaymentItems}
+				/>
 			)}
 
-			{/* Modal Edit Payment */}
 			{isEditPaymentModalOpen && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-					<div className="bg-white rounded-lg p-6 w-full max-w-md">
-						<Button
-							onClick={() => setIsEditPaymentOpen(false)}
-							className="btn btn-error text-white p-2 mb-4"
-							content="Tutup"
-						/>
-						<h2 className="text-lg font-bold mb-4">Edit Payment Item</h2>
-						<div className="mb-4">
-							<label className="block text-gray-700 mb-1">Judul Pembayaran</label>
-							<input
-								type="text"
-								name="title"
-								value={formOption.title}
-								onChange={(e) => setFormOption({ ...formOption, [e.target.name]: e.target.value })}
-								className="w-full px-3 py-2 border rounded-md"
+				<>
+					<Modal
+						title={"edit payment items"}
+						label={"Judul Pembayaran"}
+						nominal={"Nominal"}
+						state={formOption}
+						setState={setIsEditPaymentOpen}
+						setForm={setFormOption}
+						button={null}
+						extra={
+							<Button
+								className={"success"}
+								content={"Simpan"}
+								onClick={async () => {
+									try {
+										editPaymentItems(editId);
+										await fetchPaymentItems();
+										setIsEditPaymentOpen(false);
+										setFormOption({ title: "", value: 0 });
+										setEditId(null);
+									} catch (err) {
+										console.log(err);
+									}
+								}}
 							/>
-						</div>
-						<div className="mb-4">
-							<label className="block text-gray-700 mb-1">Nominal</label>
-							<input
-								type="number"
-								name="value"
-								value={formOption.value}
-								onChange={(e) => setFormOption({ ...formOption, [e.target.name]: Number(e.target.value) })}
-								className="w-full px-3 py-2 border rounded-md"
-							/>
-						</div>
-						<Button
-							className="btn btn-success p-2"
-							content="Simpan"
-							onClick={async () => {
-								try {
-									await axios.patch(`http://localhost:8080/api/payment-items/edit/${editId}`, {
-										title: formOption.title,
-										value: formOption.value,
-									});
-									await fetchPaymentItems();
-									setIsEditPaymentOpen(false);
-									setFormOption({ title: "", value: 0 });
-									setEditId(null);
-								} catch (err) {
-									console.log(err);
-								}
-							}}
-						/>
-					</div>
-				</div>
+						}
+					/>
+				</>
 			)}
-
 			{/* Cetak */}
 			<CetakPembayaran
 				ref={contentRef}

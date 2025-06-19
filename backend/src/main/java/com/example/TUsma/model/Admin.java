@@ -12,8 +12,8 @@ public class Admin {
     private Long id;
     private String name;
     private String address;
-    private String country;
-    private String city;
+    private String email;
+    private String phoneNumber;
     private String password;
 
 
@@ -41,20 +41,20 @@ public class Admin {
         return address;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getCountry() {
-        return country;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public String getCity() {
-        return city;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public String getPassword() {

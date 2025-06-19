@@ -52,7 +52,7 @@ const Pemasukan = () => {
 
 					<PDFDownloadLink
 						document={<DownloadPDF jumlahSiswa={jumlah} pemasukan={pemasukan} />}
-						fileName="prediksi-pemasukan.pdf"
+						fileName="laporan-pemasukan.pdf"
 						className="btn btn-primary mt-4">
 						download pdf
 					</PDFDownloadLink>

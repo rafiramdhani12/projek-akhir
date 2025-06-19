@@ -1,12 +1,12 @@
 import React from "react";
-import Form from "../components/Form";
-import { useNavigate } from "react-router-dom";
-import { useTu } from "../context/TuContext";
 import Button from "../components/Button";
+import { useNavigate } from "react-router-dom";
+import { useSuperAdmin } from "../context/SuperAdminContext";
+import Form from "../components/Form";
 
-const AddTu = () => {
-	const { formData, setFormData, tambahTu } = useTu();
+const TambahSuperAdmin = () => {
 	const navigate = useNavigate();
+	const { formData, setFormData, createSuperAdmin, error } = useSuperAdmin();
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -15,24 +15,19 @@ const AddTu = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		try {
-			await tambahTu();
-			navigate("/dashboard/admin/daftar-tu");
-		} catch (error) {
-			console.error("Gagal menambah TU:", error);
-		}
+		await createSuperAdmin();
+		navigate("/dashboard/superadmin");
 	};
 
 	return (
-		<Form title="Tambah TU" button={null} className={"success"}>
-			<Button className={"error mb-2"} onClick={() => navigate("/dashboard/admin/daftar-tu")} content={"back"} />
-
+		<Form title={"tambah super admin"} button={null} error={error}>
+			<Button className="error mb-4" onClick={() => navigate("/dashboard/superadmin")} content="Back" />
 			{[
 				{ label: "Nama", name: "name" },
+				{ label: "Email", name: "email", type: "email" },
+				{ label: "Password", name: "password", type: "password" },
+				{ label: "No. Telepon", name: "phoneNumber" },
 				{ label: "Alamat", name: "address" },
-				{ label: "Kota", name: "city" },
-				{ label: "Negara", name: "country" },
-				{ label: "Password", name: "password" },
 			].map(({ label, name, type = "text" }) => (
 				<div key={name}>
 					<label className="block text-gray-600 font-medium">{label}</label>
@@ -47,9 +42,9 @@ const AddTu = () => {
 					/>
 				</div>
 			))}
-			<Button className={"success mt-4"} onClick={handleSubmit} content={"Tambah TU"} />
+			<Button content="Simpan" className="success mt-4" onClick={handleSubmit} />
 		</Form>
 	);
 };
 
-export default AddTu;
+export default TambahSuperAdmin;

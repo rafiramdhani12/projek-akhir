@@ -64,7 +64,7 @@ export const SiswaProvider = ({ children }) => {
 	// fetch data pada saat pertama kali load
 	useEffect(() => {
 		fetchDataSiswa();
-	}, [fetchDataSiswa]);
+	}, []);
 
 	return (
 		<SiswaContext.Provider value={{ siswa, tambahSiswa, loading, error, fetchDataSiswa, pelunasan }}>

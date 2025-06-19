@@ -18,12 +18,17 @@ const styles = StyleSheet.create({
 });
 
 export const DownloadPDF = ({ jumlahSiswa, pemasukan }) => {
+	const date = new Date();
+	const formattedDate = date.toLocaleDateString("id-ID", {
+		year: "numeric",
+	});
+
 	return (
 		<>
 			<Document>
 				<Page size="A4" style={styles.page}>
 					<View>
-						<Text style={styles.title}>Laporan Prediksi Pemasukan</Text>
+						<Text style={styles.title}>Laporan Pemasukan ajaran tahun {formattedDate}</Text>
 						<Text style={styles.content}>Jumlah Siswa: {jumlahSiswa}</Text>
 						<Text style={styles.content}>Prediksi Pemasukan: Rp {pemasukan.toLocaleString("id-ID")}</Text>
 						<Text style={styles.content}>Tanggal: {new Date().toLocaleDateString("id-ID")}</Text>

@@ -17,6 +17,13 @@ import AddTu from "./pages/AddTu";
 import EditSiswa from "./pages/EditSiswa";
 import EditTu from "./pages/EditTu";
 import { useAuth } from "./context/AuthContext";
+import Test from "./pages/Test";
+import TambahSuperAdmin from "./pages/TambahSuperAdmin";
+import TambahAdmin from "./pages/TambahAdmin";
+import Resign from "./pages/Resign";
+import EditAdmin from "./pages/EditAdmin";
+import EditSuperAdmin from "./pages/EditSuperAdmin";
+import KetentuanResign from "./pages/KetetentuanResign";
 
 function App() {
 	const { role } = useAuth();
@@ -56,6 +63,14 @@ function App() {
 					<Route path={`/dashboard/admin/tambah-tu`} element={<AddTu />} />
 					<Route path={`/dashboard/admin/edit-tata-usaha/:id`} element={<EditTu />} />
 					<Route path={`/dashboard/admin/edit-siswa/:id`} element={<EditSiswa />} />
+
+					<Route path={`/dashboard/superadmin/tambah-super-admin`} element={<TambahSuperAdmin />} />
+					<Route path={`/dashboard/superadmin/tambah-admin`} element={<TambahAdmin />} />
+					<Route path={`/dashboard/superadmin/edit-admin/:id`} element={<EditAdmin />} />
+					<Route path={`/dashboard/superadmin/edit-super-admin/:id`} element={<EditSuperAdmin />} />
+					<Route path={`/ketentuan-resign/:id`} element={<KetentuanResign />} />
+					<Route path={`/resign`} element={<Resign />} />
+					<Route path={`/test`} element={<Test />} />
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</LayoutPage>

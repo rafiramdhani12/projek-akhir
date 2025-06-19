@@ -82,7 +82,7 @@ const Spp = () => {
 								<td>{item.nama}</td>
 								<td>{item.kelas}</td>
 								<td>
-									<NavLink to={`/dashboard/admin/pembayaran/${item.id}`} className={"btn btn-success text-white"}>
+									<NavLink to={`/dashboard/tata-usaha/pembayaran/${item.id}`} className={"btn btn-success text-white"}>
 										pembayaran
 									</NavLink>
 								</td>
