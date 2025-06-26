@@ -9,14 +9,44 @@ public class SuperAdmin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String idEmployee;
+    private String role;
     private String name;
     private String password;
     private String address;
     private String email;
     private String phoneNumber;
 
+    public SuperAdmin(){
+        
+    }
+
+    public SuperAdmin(String idEmployee , String name, String email , String password){
+        this.idEmployee = idEmployee;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = "superAdmin";
+    }
+
     public void setId(long id){
         this.id = id;
+    }
+
+    public void setIdEmployee(String idEmployee){
+        this.idEmployee = idEmployee;
+    }
+
+    public String getIdEmployee(){
+        return idEmployee;
+    }
+
+    public void setRole(String role){
+        this.role = role;
+    }
+
+    public String getRole(){
+        return role;
     }
 
     public long getId(){

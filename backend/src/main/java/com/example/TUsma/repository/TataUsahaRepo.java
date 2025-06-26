@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TataUsahaRepo extends JpaRepository<TataUsaha,Long>{
     Optional<TataUsaha> findByName(String name);
+    Optional<TataUsaha> findByIdEmployee(String idEmployee);
 }

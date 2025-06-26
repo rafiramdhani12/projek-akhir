@@ -42,8 +42,9 @@ public class TataUsahaController {
             TataUsaha Tu =TuOptional.get();
             Tu.setName(tuDetails.getName());
             Tu.setAddress(tuDetails.getAddress());
-            Tu.setCountry(tuDetails.getCountry());
-            Tu.setCity(tuDetails.getCity());
+            Tu.setEmail(tuDetails.getEmail());
+            Tu.setPhoneNumber(tuDetails.getPhoneNumber());
+            Tu.setPassword(tuDetails.getPassword());
             TataUsaha updateTu = TuRepo.save(Tu);
             return ResponseEntity.ok(updateTu);
         }else{
@@ -53,11 +54,11 @@ public class TataUsahaController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody TataUsaha loginRequest){
-        Optional<TataUsaha> tu = TuRepo.findByName(loginRequest.getName());
+        Optional<TataUsaha> tu = TuRepo.findByIdEmployee(loginRequest.getIdEmployee());
         Map<String,Object> response = new HashMap<>();
 
         if(tu.isPresent() && tu.get().getPassword().equals(loginRequest.getPassword())){
-            String token = JwtUtil.generateToken(tu.get().getName());
+            String token = JwtUtil.generateToken(tu.get().getIdEmployee());
             response.put("status","success");
             response.put("token", token);
             response.put("tata-usaha" , tu.get());

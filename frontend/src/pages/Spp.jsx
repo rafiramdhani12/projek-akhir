@@ -62,15 +62,20 @@ const Spp = () => {
 					</select>
 				</div>
 
-				<div className="mb-4">
+				<div className="mb-2 ">
 					<Button className={"btn btn-error text-white "} content={"back"} onClick={handleBack} />
+				</div>
+				<div className="mb-2 ">
+					<NavLink to={`/dashboard/tata-usaha/list-history-pembayaran`} className={"btn btn-success text-white"}>
+						history pembayaran
+					</NavLink>
 				</div>
 
 				<table className="table">
 					<thead>
 						<tr>
 							<th>no</th>
-							<th>Nama</th>
+							<th>NISN</th>
 							<th>kelas</th>
 							<th>aksi</th>
 						</tr>

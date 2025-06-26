@@ -10,11 +10,25 @@ public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // generate id automatis 
     private Long id;
+    private String idEmployee;
+    private String role;
     private String name;
     private String address;
     private String email;
     private String phoneNumber;
     private String password;
+
+    public Admin(){
+        
+    }
+
+    public Admin(String idEmployee , String name, String email , String password){
+        this.idEmployee = idEmployee;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = "admin";
+    }
 
 
     public Long getId() {
@@ -23,6 +37,22 @@ public class Admin {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getIdEmployee() {
+        return idEmployee;
+    }
+
+    public void setIdEmployee(String idEmployee) {
+        this.idEmployee = idEmployee;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getName() {

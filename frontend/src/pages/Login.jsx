@@ -1,15 +1,17 @@
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
+import { Eye, EyeClosed } from "lucide-react";
 import axios from "axios";
 import Form from "../components/Form";
+import Button from "../components/Button";
 
 const Login = () => {
-	const [name, setName] = useState("");
+	const [idEmployee, setIdEmployee] = useState("");
 	const [password, setPassword] = useState("");
-	const [role, setRole] = useState("admin");
 	const [error, setError] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
+	const [isShow, setIsShow] = useState(false);
 
 	const navigate = useNavigate();
 	const { login } = useAuth();
@@ -20,79 +22,44 @@ const Login = () => {
 		setIsLoading(true);
 
 		try {
-			const res = await axios.post(`http://localhost:8080/api/${role}/login`, {
-				name,
+			const res = await axios.post(`http://localhost:8080/api/login`, {
+				idEmployee,
 				password,
 			});
 
-			console.log("Full response:", res);
+			const { token, user } = res.data;
 
-			const data = res.data;
+			if (!token || !user) throw new Error("Data tidak lengkap dari server");
 
-			if (!data || !data.token) {
-				throw new Error("Token tidak diterima dari server");
-			}
-
-			// Ambil info dari response atau fallback ke input
-			const user = data.superAdmin || data.admin || data.tataUsaha || {};
-			const userId = user.id;
-			const userName = user.name || name;
-			const userRole = role; // sudah ditentukan dari select
-
-			// Simpan ke context
 			login({
-				id: userId,
-				name: userName,
-				role: userRole,
-				token: data.token,
+				id: user.id,
+				name: user.name,
+				role: user.role,
+				token,
 			});
 
-			// Redirect berdasarkan role
-			if (userRole === "admin") {
-				navigate("/dashboard/admin");
-			} else if (userRole === "tata-usaha") {
-				navigate("/dashboard/tata-usaha");
-			} else {
-				navigate("/dashboard/superadmin");
-			}
+			navigate(`/dashboard/${user.role}`);
 		} catch (err) {
-			console.error("Error details:", {
-				error: err,
-				response: err.response,
-			});
-
-			const errorMessage = err.response?.data?.message || err.message || "Terjadi kesalahan saat login";
-			setError(errorMessage);
+			console.error("Login error:", err);
+			const msg = err.response?.data?.message || err.message || "Login gagal";
+			setError(msg);
 		} finally {
 			setIsLoading(false);
 		}
 	};
 
 	return (
-		<Form title="Login" onSubmit={handleLogin} error={error} button={isLoading ? "Memproses..." : "Login"} disabled={isLoading} className={"success"}>
+		<Form title="Login" onSubmit={(e) => e.preventDefault()} error={error} button={null}>
 			<div className="mb-4">
-				<label htmlFor="role" className="block text-gray-700 mb-2">
-					Login sebagai
-				</label>
-				<select id="role" value={role} onChange={(e) => setRole(e.target.value)} className="w-full px-3 py-2 border rounded-md" disabled={isLoading}>
-					<option value="superadmin">Super Admin</option>
-					<option value="admin">Admin</option>
-					<option value="tata-usaha">Tata Usaha</option>
-				</select>
-			</div>
-
-			<div className="mb-4">
-				<label htmlFor="name" className="block text-gray-700 mb-2">
-					Nama Pengguna
+				<label htmlFor="idEmployee" className="block text-gray-700 mb-2">
+					ID Karyawan
 				</label>
 				<input
 					type="text"
-					id="name"
-					name="name"
-					value={name}
-					onChange={(e) => setName(e.target.value)}
+					id="idEmployee"
+					value={idEmployee}
+					onChange={(e) => setIdEmployee(e.target.value)}
 					className="w-full px-3 py-2 border rounded-md"
-					required
 					disabled={isLoading}
 				/>
 			</div>
@@ -101,17 +68,23 @@ const Login = () => {
 				<label htmlFor="password" className="block text-gray-700 mb-2">
 					Password
 				</label>
-				<input
-					type="password"
-					id="password"
-					name="password"
-					value={password}
-					onChange={(e) => setPassword(e.target.value)}
-					className="w-full px-3 py-2 border rounded-md"
-					required
-					disabled={isLoading}
-				/>
+				<div className="flex items-center gap-2">
+					<input
+						type={isShow ? "text" : "password"}
+						id="password"
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+						className="input w-full px-3 py-2 rounded-md"
+						disabled={isLoading}
+					/>
+					<Button content={isShow ? <Eye /> : <EyeClosed />} className="success" onClick={() => setIsShow(!isShow)} />
+				</div>
+				<NavLink to="/lupa-password" className="text-sm text-blue-600 ">
+					Lupa password ?
+				</NavLink>
 			</div>
+
+			<Button className="success mb-2" onClick={handleLogin} content={isLoading ? "Memproses..." : "Login"} />
 		</Form>
 	);
 };

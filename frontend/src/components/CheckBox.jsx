@@ -1,4 +1,4 @@
-const CheckBox = ({ title, value, checked, onChange }) => {
+const CheckBox = ({ title, value, checked, onChange, disable }) => {
 	return (
 		<div className="form-control">
 			<label className="label cursor-pointer">
@@ -6,7 +6,7 @@ const CheckBox = ({ title, value, checked, onChange }) => {
 					{title} {typeof value === "number" ? `(Rp ${value.toLocaleString("id-ID")})` : null}
 				</span>
 
-				<input type="checkbox" className="checkbox" checked={checked} onChange={onChange} />
+				<input type="checkbox" className="checkbox" checked={checked} onChange={onChange} disabled={disable} />
 			</label>
 		</div>
 	);

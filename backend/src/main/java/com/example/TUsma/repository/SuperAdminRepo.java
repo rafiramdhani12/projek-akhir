@@ -7,4 +7,5 @@ import com.example.TUsma.model.SuperAdmin;
 
 public interface SuperAdminRepo extends JpaRepository<SuperAdmin,Long> {
     Optional<SuperAdmin> findByName(String name);
+    Optional<SuperAdmin> findByIdEmployee(String idEmployee);
 }

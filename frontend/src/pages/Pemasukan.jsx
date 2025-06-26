@@ -32,7 +32,7 @@ const Pemasukan = () => {
 		<section className="container mx-auto p-4">
 			<Button className="btn btn-error text-white rounded-lg" onClick={() => window.history.back()} content={"back"} />
 
-			<h1 className="text-center text-2xl font-bold my-4">Prediksi Pemasukan Tahun Ajaran Baru</h1>
+			<h1 className="text-center text-2xl font-bold my-4">Pemasukan Tahun Ajaran Baru</h1>
 
 			{jumlah !== null && (
 				<p className="text-center text-lg mb-4">
@@ -46,7 +46,7 @@ const Pemasukan = () => {
 				<>
 					<div className="mt-4 p-4 bg-green-100 rounded-md">
 						<p className="text-lg">
-							Prediksi Pemasukan: <strong>Rp {pemasukan.toLocaleString("id-ID")}</strong>
+							Pemasukan: <strong>Rp {pemasukan.toLocaleString("id-ID")}</strong>
 						</p>
 					</div>
 

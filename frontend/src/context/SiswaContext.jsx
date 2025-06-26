@@ -10,6 +10,7 @@ export const SiswaProvider = ({ children }) => {
 	const [siswa, setSiswa] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
+	const [riwayatPembayaran, setRiwayatPembayaran] = useState([]);
 
 	const navigate = useNavigate();
 
@@ -61,13 +62,26 @@ export const SiswaProvider = ({ children }) => {
 		}
 	};
 
+	const fetchPembayaranSpp = async (id) => {
+		if (!id) {
+			setRiwayatPembayaran([]);
+			return;
+		}
+		try {
+			const res = await axios.get(`http://localhost:8080/api/spp/siswa/${id}`);
+			setRiwayatPembayaran(res.data);
+		} catch (error) {
+			console.error(`gagal mengambil riwayat pembayaran : ${error}`);
+		}
+	};
+
 	// fetch data pada saat pertama kali load
 	useEffect(() => {
 		fetchDataSiswa();
 	}, []);
 
 	return (
-		<SiswaContext.Provider value={{ siswa, tambahSiswa, loading, error, fetchDataSiswa, pelunasan }}>
+		<SiswaContext.Provider value={{ siswa, tambahSiswa, loading, error, fetchDataSiswa, pelunasan, riwayatPembayaran, fetchPembayaranSpp }}>
 			{children}
 		</SiswaContext.Provider>
 	);

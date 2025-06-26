@@ -8,4 +8,5 @@ import com.example.TUsma.model.Pembayaran;
 
 public interface PembayaranRepo extends JpaRepository<Pembayaran, Long> {
     List<Pembayaran> findBySiswaIdAndTahun(Long siswaId , int tahun);
+    List<Pembayaran> findBySiswaId(Long siswaId);
 }

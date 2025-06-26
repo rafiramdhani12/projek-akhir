@@ -28,19 +28,18 @@ const DaftarTu = () => {
 					<Button className={"primary"} content={"tambah tu"} onClick={handleAdd} />
 				</div>
 				<Tabel
-					headers={["No", "Name", "address", "city", "country", "Aksi"]}
+					headers={["No", "Name", "Email", "Address", "Phone Number", "Aksi"]}
 					data={tataUsaha}
-					searchKeys={["name", "address", "city", "country", "password"]}
+					searchKeys={["name", "address", "email", "phoneNumber", "password"]}
 					renderRow={(currentData) =>
 						currentData.map((item, index) => (
 							<tr key={item.id}>
 								{console.log(item)}
 								<td>{index + 1}</td>
 								<td>{item.name}</td>
+								<td>{item.email}</td>
 								<td>{item.address}</td>
-								<td>{item.city}</td>
-								<td>{item.country}</td>
-
+								<td>+{item.phoneNumber}</td>
 								<td>
 									<div className="flex gap-3">
 										<Button content={"update"} className={"primary"} onClick={() => handleEdit(item.id)} />

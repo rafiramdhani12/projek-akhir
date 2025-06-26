@@ -10,11 +10,25 @@ public class TataUsaha {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String idEmployee;
+    private String role;
     private String name;
     private String address;
-    private String country;
-    private String city;
+    private String email;
+    private String phoneNumber;
     private String password;
+
+    public TataUsaha() {
+
+    }
+
+    public TataUsaha(String idEmployee , String name, String email , String password){
+        this.idEmployee = idEmployee;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = "tata-usaha";
+    }
 
     public void setId(long id) {
         this.id = id;
@@ -22,6 +36,14 @@ public class TataUsaha {
 
     public long getId() {
         return id;
+    }
+
+    private void setIdEmployee(String idEmployee) {
+        this.idEmployee = idEmployee;
+    }
+
+    public String getIdEmployee() {
+        return idEmployee;
     }
 
     public void setName(String name) {
@@ -40,20 +62,20 @@ public class TataUsaha {
         return address;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getCountry() {
-        return country;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public String getCity() {
-        return city;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public void setPassword(String password) {

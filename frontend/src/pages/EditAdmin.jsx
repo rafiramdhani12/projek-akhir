@@ -3,10 +3,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAdmin } from "../context/AdminContext";
 import Form from "../components/Form";
 import Button from "../components/Button";
+import { useAuth } from "../context/AuthContext";
 
 const EditAdmin = () => {
 	const { id } = useParams();
 	const { admin, formData, setFormData, editAdmin, error } = useAdmin();
+	const { role } = useAuth();
 	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
 
@@ -28,9 +30,8 @@ const EditAdmin = () => {
 		setFormData((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		navigate("/dashboard/superadmin");
+	const handleSubmit = async () => {
+		navigate(`/dashboard/${role}`);
 		setIsLoading(true);
 		try {
 			await editAdmin(id);
@@ -43,8 +44,8 @@ const EditAdmin = () => {
 
 	return (
 		<>
-			<Form title={"edit admin"} button={null} error={error}>
-				<Button className="error mb-4" onClick={() => navigate("/dashboard/superadmin")} content="Back" />
+			<Form title={"edit admin"} onSubmit={(e) => e.preventDefault()} button={null} error={error}>
+				<Button className="error mb-4" onClick={() => navigate(`/dashboard/${role}`)} content="Back" />
 				{[
 					{ label: "Nama", name: "name" },
 					{ label: "Password", name: "password", type: "password" },

@@ -69,11 +69,11 @@ public class SuperAdminController {
 
 @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody SuperAdmin loginRequest){
-    Optional<SuperAdmin> superAdmin = superAdminRepo.findByName(loginRequest.getName());
+    Optional<SuperAdmin> superAdmin = superAdminRepo.findByIdEmployee(loginRequest.getIdEmployee());
     Map<String, Object> response = new HashMap<>();
 
     if(superAdmin.isPresent() && superAdmin.get().getPassword().equals(loginRequest.getPassword())){
-        String token = JwtUtil.generateToken(superAdmin.get().getName());
+        String token = JwtUtil.generateToken(superAdmin.get().getIdEmployee());
 
         response.put("status", "success");
         response.put("token", token);

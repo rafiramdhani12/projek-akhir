@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useState } from "react";
 import { useAuth } from "./AuthContext";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AdminContext = createContext();
 
@@ -15,6 +16,9 @@ export const AdminProvider = ({ children }) => {
 		country: "",
 		password: "",
 	});
+
+	const navigate = useNavigate();
+	const { id: userId, logout } = useAuth();
 
 	const fetchDataAdmin = useCallback(async () => {
 		try {
@@ -58,6 +62,11 @@ export const AdminProvider = ({ children }) => {
 				headers: { Authorization: `Bearer ${token}` },
 			});
 			setAdmin((prev) => prev.filter((item) => item.id !== id));
+
+			if (parseInt(userId) === id) {
+				logout();
+				navigate("/resign");
+			}
 		} catch (error) {
 			setError("gagal delete admin");
 			console.log(`gagal dalam delete admin ${error}`);

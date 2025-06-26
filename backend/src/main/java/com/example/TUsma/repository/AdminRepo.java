@@ -8,4 +8,5 @@ import com.example.TUsma.model.Admin;
 
 public interface AdminRepo extends JpaRepository<Admin, Long> {
     Optional<Admin> findByName(String name);
+    Optional<Admin> findByIdEmployee(String idEmployee);
 }

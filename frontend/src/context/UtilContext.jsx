@@ -123,16 +123,17 @@ export const UtilProvider = ({ children }) => {
 		}
 		if (role === "superadmin") {
 			return (
-				<>
+				<div>
 					<NavLink to={`/dashboard/superadmin/edit-super-admin/${item.id}`} className="btn btn-success btn-sm text-white mr-2">
 						edit
 					</NavLink>
+
 					{parseInt(userId) === item.id && (
 						<button onClick={() => navigate(`/ketentuan-resign/${item.id}`)} className="btn btn-error btn-sm text-white">
 							resign
 						</button>
 					)}
-				</>
+				</div>
 			);
 		}
 		return null;
